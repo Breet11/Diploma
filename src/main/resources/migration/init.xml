@@ -1,0 +1,102 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog">
+    <changeSet id="1773947020074-1" author="vladi">
+        <createTable tableName="dip_car">
+            <column name="uuid" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_dip_car"/>
+            </column>
+            <column name="price" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="available" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1773947020074-2" author="vladi">
+        <createTable tableName="dip_car_brand">
+            <column name="uuid" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_dip_car_brand"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1773947020074-3" author="vladi">
+        <createTable tableName="dip_car_model">
+            <column name="uuid" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_dip_car_model"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1773947020074-4" author="vladi">
+        <createTable tableName="dip_car_specs">
+            <column name="uuid" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_dip_car_specs"/>
+            </column>
+            <column name="acceleration" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="top_speed" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="release_year" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1773947020074-5" author="vladi">
+        <createTable tableName="dip_engine">
+            <column name="uuid" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_dip_engine"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1773947020074-6" author="vladi">
+        <createTable tableName="dip_engine_specs">
+            <column name="uuid" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_dip_engine_specs"/>
+            </column>
+            <column name="fuel_consumption" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="horsepower" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="torque" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1773947020074-7" author="vladi">
+        <createTable tableName="dip_engine_type">
+            <column name="uuid" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_dip_engine_type"/>
+            </column>
+            <column name="engine_type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1773947020074-8" author="vladi">
+        <createTable tableName="dip_user">
+            <column name="uuid" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_dip_user"/>
+            </column>
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="login" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="hashed_password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1773947020074-9" author="vladi">
+        <addUniqueConstraint columnNames="engine_type" constraintName="uc_dip_engine_type_enginetype"
+                             tableName="dip_engine_type"/>
+    </changeSet>
+</databaseChangeLog>

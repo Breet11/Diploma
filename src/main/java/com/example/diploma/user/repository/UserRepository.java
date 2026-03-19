@@ -1,4 +1,4 @@
-package com.example.diploma.user;
+package com.example.diploma.user.repository;
 
 import org.springframework.data.repository.CrudRepository;
 

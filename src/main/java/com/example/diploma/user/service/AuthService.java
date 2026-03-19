@@ -1,6 +1,6 @@
 package com.example.diploma.user.service;
 
-import com.example.diploma.user.UserRepository;
+import com.example.diploma.user.repository.UserRepository;
 import com.example.diploma.user.dto.LoginRequestDto;
 import com.example.diploma.user.dto.LoginResponseDto;
 import com.example.diploma.user.dto.RegisterRequestDto;
