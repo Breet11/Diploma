@@ -1,0 +1,7 @@
+1. Need to implement the user authentication system for the web application.
+-- a) password encryption and decription
+-- b) JWT token generation and validation
+-- c) User authentication flow
+
+2. Need to add more entities
+-- a)
