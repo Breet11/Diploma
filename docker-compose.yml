@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  postgres_db:
+    image: postgres:latest
+    container_name: diploma_postgresql
+    restart: always
+    environment:
+      POSTGRES_USER: diploma_user
+      POSTGRES_PASSWORD: diploma_password
+      POSTGRES_DB: diplomadb
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql
+
+volumes:
+  pgdata:
+    driver: local
