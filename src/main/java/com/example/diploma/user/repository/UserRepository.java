@@ -1,10 +1,11 @@
 package com.example.diploma.user.repository;
 
+import com.example.diploma.user.model.User;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 import java.util.UUID;
 
-public interface UserRepository<T> extends CrudRepository<T, UUID> {
-    Optional<T> findByLogin(String login);
+public interface UserRepository extends CrudRepository<User, UUID> {
+    Optional<User> findByLogin(String login);
 }

@@ -1,6 +1,6 @@
 package com.example.diploma.user.dto;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 
-public record LoginRequestDto(@NotNull String login, @NotNull String hashedPassword) {
+public record LoginRequestDto(@NotBlank String login, @NotBlank String password) {
 }

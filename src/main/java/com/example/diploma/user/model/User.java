@@ -8,7 +8,8 @@ import lombok.Setter;
 
 import java.util.UUID;
 
-@Entity(name = "dip_user")
+@Entity
+@Table(name = "dip_user")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -26,4 +27,8 @@ public class User {
 
     @Column(name = "hashed_password", nullable = false)
     private String hashedPassword;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    private Role role;
 }

@@ -1,3 +1,5 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog">
     <include file="init.xml" relativeToChangelogFile="true"/>
+    <include file="20260325-add-user-role.xml" relativeToChangelogFile="true"/>
+    <include file="20260325-add-entity-relations.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

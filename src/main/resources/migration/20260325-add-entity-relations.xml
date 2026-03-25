@@ -1,0 +1,79 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog">
+    <changeSet id="20260325-2-add-relation-columns" author="vrijenco">
+        <addColumn tableName="dip_engine">
+            <column name="engine_specs_uuid" type="UUID"/>
+        </addColumn>
+
+        <addColumn tableName="dip_engine_specs">
+            <column name="engine_type_uuid" type="UUID"/>
+        </addColumn>
+
+        <addColumn tableName="dip_car_specs">
+            <column name="car_brand_uuid" type="UUID"/>
+            <column name="car_model_uuid" type="UUID"/>
+        </addColumn>
+
+        <addColumn tableName="dip_car">
+            <column name="engine_uuid" type="UUID"/>
+            <column name="car_specs_uuid" type="UUID"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20260325-3-add-relation-constraints" author="vrijenco">
+        <addNotNullConstraint tableName="dip_engine" columnName="engine_specs_uuid" columnDataType="UUID"/>
+        <addNotNullConstraint tableName="dip_engine_specs" columnName="engine_type_uuid" columnDataType="UUID"/>
+        <addNotNullConstraint tableName="dip_car_specs" columnName="car_brand_uuid" columnDataType="UUID"/>
+        <addNotNullConstraint tableName="dip_car_specs" columnName="car_model_uuid" columnDataType="UUID"/>
+        <addNotNullConstraint tableName="dip_car" columnName="engine_uuid" columnDataType="UUID"/>
+        <addNotNullConstraint tableName="dip_car" columnName="car_specs_uuid" columnDataType="UUID"/>
+
+        <addForeignKeyConstraint baseTableName="dip_engine"
+                                 baseColumnNames="engine_specs_uuid"
+                                 referencedTableName="dip_engine_specs"
+                                 referencedColumnNames="uuid"
+                                 constraintName="fk_dip_engine_engine_specs"/>
+
+        <addForeignKeyConstraint baseTableName="dip_engine_specs"
+                                 baseColumnNames="engine_type_uuid"
+                                 referencedTableName="dip_engine_type"
+                                 referencedColumnNames="uuid"
+                                 constraintName="fk_dip_engine_specs_engine_type"/>
+
+        <addForeignKeyConstraint baseTableName="dip_car_specs"
+                                 baseColumnNames="car_brand_uuid"
+                                 referencedTableName="dip_car_brand"
+                                 referencedColumnNames="uuid"
+                                 constraintName="fk_dip_car_specs_brand"/>
+
+        <addForeignKeyConstraint baseTableName="dip_car_specs"
+                                 baseColumnNames="car_model_uuid"
+                                 referencedTableName="dip_car_model"
+                                 referencedColumnNames="uuid"
+                                 constraintName="fk_dip_car_specs_model"/>
+
+        <addForeignKeyConstraint baseTableName="dip_car"
+                                 baseColumnNames="engine_uuid"
+                                 referencedTableName="dip_engine"
+                                 referencedColumnNames="uuid"
+                                 constraintName="fk_dip_car_engine"/>
+
+        <addForeignKeyConstraint baseTableName="dip_car"
+                                 baseColumnNames="car_specs_uuid"
+                                 referencedTableName="dip_car_specs"
+                                 referencedColumnNames="uuid"
+                                 constraintName="fk_dip_car_specs"/>
+
+        <addUniqueConstraint tableName="dip_engine"
+                             columnNames="engine_specs_uuid"
+                             constraintName="uc_dip_engine_engine_specs_uuid"/>
+
+        <addUniqueConstraint tableName="dip_car"
+                             columnNames="engine_uuid"
+                             constraintName="uc_dip_car_engine_uuid"/>
+
+        <addUniqueConstraint tableName="dip_car"
+                             columnNames="car_specs_uuid"
+                             constraintName="uc_dip_car_specs_uuid"/>
+    </changeSet>
+</databaseChangeLog>
+

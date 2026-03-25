@@ -1,10 +1,11 @@
 package com.example.diploma.user.dto;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
 public record RegisterRequestDto(
-        @NotNull String email,
-        @NotNull String login,
-        @NotNull String password
+        @Email @NotBlank String email,
+        @NotBlank String login,
+        @NotBlank String password
 ) {
 }
