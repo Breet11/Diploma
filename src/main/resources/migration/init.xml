@@ -1,4 +1,7 @@
-<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog">
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
     <changeSet id="1773947020074-1" author="vladi">
         <createTable tableName="dip_car">
             <column name="uuid" type="UUID">

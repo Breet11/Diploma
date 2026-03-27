@@ -1,11 +1,9 @@
 package com.example.diploma.car.repository;
 
+import com.example.diploma.car.model.Car;
 import org.springframework.data.repository.CrudRepository;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
-public interface CarRepository<T> extends CrudRepository<T, UUID> {
-    Optional<List<T>> getAllCars();
+public interface CarRepository extends CrudRepository<Car, UUID> {
 }

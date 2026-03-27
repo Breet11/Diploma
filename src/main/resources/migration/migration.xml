@@ -1,4 +1,7 @@
-<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog">
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
     <include file="init.xml" relativeToChangelogFile="true"/>
     <include file="20260325-add-user-role.xml" relativeToChangelogFile="true"/>
     <include file="20260325-add-entity-relations.xml" relativeToChangelogFile="true"/>
