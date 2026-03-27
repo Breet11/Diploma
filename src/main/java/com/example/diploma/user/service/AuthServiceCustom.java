@@ -64,5 +64,3 @@ public class AuthServiceCustom implements AuthService {
         return ResponseEntity.ok("User registered successfully");
     }
 }
-
-
