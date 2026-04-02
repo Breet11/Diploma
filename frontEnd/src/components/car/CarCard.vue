@@ -5,14 +5,18 @@ defineProps({
     required: true
   }
 });
+
+const emit = defineEmits(['rent']);
 </script>
 
 <template>
   <article class="car-card">
+    <img :src="car.imageUrl" :alt="`${car.brand} ${car.model}`" class="car-card__image" />
+
     <div class="car-card__title-wrap">
       <h3 class="car-card__title">{{ car.brand }} {{ car.model }}</h3>
       <span class="car-card__badge" :class="car.available ? 'car-card__badge--ok' : 'car-card__badge--warn'">
-        {{ car.available ? 'В наличии' : 'Нет в наличии' }}
+        {{ car.available ? 'Доступен' : 'Недоступен' }}
       </span>
     </div>
 
@@ -23,7 +27,7 @@ defineProps({
       <li><strong>Двигатель:</strong> {{ car.engineType }}</li>
     </ul>
 
-    <p class="car-card__price">{{ Number(car.price).toLocaleString('ru-RU') }} ₽</p>
+    <p class="car-card__price">{{ Number(car.hourlyRentalPrice).toLocaleString('ru-RU') }} ₽ / час</p>
+    <button type="button" class="btn" :disabled="!car.available" @click="emit('rent', car)">Арендовать</button>
   </article>
 </template>
-

@@ -32,5 +32,8 @@ public class Car {
     @Column(nullable = false)
     private Long price;
 
+    @Column(name = "image_url", nullable = false)
+    private String imageUrl;
+
     private boolean available;
 }

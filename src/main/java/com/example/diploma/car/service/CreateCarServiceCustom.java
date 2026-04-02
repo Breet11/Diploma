@@ -8,25 +8,12 @@ import com.example.diploma.engine.repository.EngineRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class CreateCarServiceCustom implements CreateCarService {
     private final CarRepository carRepository;
     private final EngineRepository engineRepository;
     private final CarSpecsRepository carSpecsRepository;
-
-    @Override
-    public List<Car> getAllCars() {
-        List<Car> cars = new ArrayList<>();
-        carRepository.findAll().forEach(cars::add);
-        if (cars.isEmpty()) {
-            throw new IllegalArgumentException("No cars found");
-        }
-        return cars;
-    }
 
     @Override
     public Car createCar(CreateCarRequest createCarRequest) {
@@ -39,10 +26,9 @@ public class CreateCarServiceCustom implements CreateCarService {
         car.setEngine(engine);
         car.setCarSpecs(carSpecs);
         car.setPrice(createCarRequest.price());
+        car.setImageUrl(createCarRequest.imageUrl());
         car.setAvailable(createCarRequest.available());
 
         return carRepository.save(car);
     }
 }
-
-

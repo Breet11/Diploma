@@ -1,0 +1,18 @@
+package com.example.diploma.car.dto;
+
+import java.util.UUID;
+
+public record CarCatalogItemResponse(
+        UUID uuid,
+        String brand,
+        String model,
+        Long releaseYear,
+        Long topSpeed,
+        String acceleration,
+        String engineType,
+        Long hourlyRentalPrice,
+        String imageUrl,
+        boolean available
+) {
+}
+

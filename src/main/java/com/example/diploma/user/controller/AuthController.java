@@ -1,11 +1,13 @@
 package com.example.diploma.user.controller;
 
+import com.example.diploma.user.dto.AuthMessageResponseDto;
 import com.example.diploma.user.dto.LoginRequestDto;
 import com.example.diploma.user.dto.LoginResponseDto;
 import com.example.diploma.user.dto.RegisterRequestDto;
 import com.example.diploma.user.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,8 +26,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@Valid @RequestBody RegisterRequestDto registerRequestDto) {
-        return authService.register(registerRequestDto);
+    public ResponseEntity<AuthMessageResponseDto> register(@Valid @RequestBody RegisterRequestDto registerRequestDto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(registerRequestDto));
     }
-
 }
