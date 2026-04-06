@@ -1,12 +1,16 @@
-import { getToken } from '../utils/auth';
+import { clearAuth, getToken } from '../utils/auth';
 
 const BASE_URL = 'http://localhost:8080';
 
 export async function http(path, options = {}) {
+  const isFormData = options.body instanceof FormData;
   const headers = {
-    'Content-Type': 'application/json',
     ...(options.headers || {})
   };
+
+  if (!isFormData) {
+    headers['Content-Type'] = 'application/json';
+  }
 
   const token = getToken();
   if (token) {
@@ -22,6 +26,9 @@ export async function http(path, options = {}) {
   const data = parseResponseText(text);
 
   if (!response.ok) {
+    if (response.status === 401 || response.status === 403) {
+      clearAuth();
+    }
     throw new Error(data?.message || data || `Request failed: ${response.status}`);
   }
 

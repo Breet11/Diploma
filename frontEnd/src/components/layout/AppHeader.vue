@@ -6,8 +6,14 @@
         <router-link to="/cars" class="header__link" active-class="header__link--active">
           Список автомобилей
         </router-link>
-        <router-link v-if="admin" to="/admin" class="header__link" active-class="header__link--active">
-          Админ панель
+        <router-link
+          v-if="admin"
+          :to="{ name: 'admin' }"
+          class="header__icon-link"
+          title="Админ панель"
+          aria-label="Админ панель"
+        >
+          <i class="mdi mdi-shield-crown-outline"></i>
         </router-link>
         <router-link
           :to="accountRoute"

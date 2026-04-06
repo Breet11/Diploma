@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
@@ -27,7 +28,8 @@ public class GetCarCatalogServiceCustom implements GetCarCatalogService {
                         car.getCarSpecs().getAcceleration(),
                         car.getEngine().getEngineSpecs().getEngineType().getEngineType(),
                         car.getPrice(),
-                        car.getImageUrl(),
+                        car.getImageBlob() == null ? null : Base64.getEncoder().encodeToString(car.getImageBlob()),
+                        car.getImageContentType(),
                         car.isAvailable()
                 ))
                 .toList();

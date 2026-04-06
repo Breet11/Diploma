@@ -32,8 +32,13 @@ public class Car {
     @Column(nullable = false)
     private Long price;
 
-    @Column(name = "image_url", nullable = false)
-    private String imageUrl;
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "image_blob")
+    private byte[] imageBlob;
+
+    @Column(name = "image_content_type")
+    private String imageContentType;
 
     private boolean available;
 }

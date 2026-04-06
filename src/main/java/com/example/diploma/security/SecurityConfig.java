@@ -51,8 +51,17 @@ public class SecurityConfig {
                                 "/engines",
                                 "/engine-specs",
                                 "/engine-types",
-                                "/users",
                                 "/loyalty-rules"
+                        ).hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET,
+                                "/car-brands",
+                                "/car-models",
+                                "/car-specs",
+                                "/engines",
+                                "/engine-specs",
+                                "/engine-types",
+                                "/loyalty-rules",
+                                "/rentals/admin"
                         ).hasRole("ADMIN")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()

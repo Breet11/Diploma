@@ -23,6 +23,9 @@ public class Engine {
     @JoinColumn(name = "engine_specs_uuid", nullable = false, unique = true)
     private EngineSpecs engineSpecs;
 
+    @Column(name = "engine_name", nullable = false)
+    private String engineName;
+
     @OneToOne(mappedBy = "engine", fetch = FetchType.LAZY)
     private Car car;
 }

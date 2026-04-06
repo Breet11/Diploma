@@ -1,0 +1,48 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="20260406-1-seed-test-users" author="copilot">
+        <insert tableName="dip_user">
+            <column name="uuid" value="f05320b7-8e6d-4ca6-933d-9f2a6c2e7001"/>
+            <column name="email" value="admin@test.local"/>
+            <column name="login" value="admin"/>
+            <column name="hashed_password" value="$2a$12$OZsgXBBCuTXUZB/LPnQCT.u/3PUMLe2fB2EkESDaUVBxOp/9uGEHW"/>
+            <column name="role" value="ADMIN"/>
+        </insert>
+
+        <insert tableName="dip_user">
+            <column name="uuid" value="f05320b7-8e6d-4ca6-933d-9f2a6c2e7002"/>
+            <column name="email" value="user1@test.local"/>
+            <column name="login" value="user1"/>
+            <column name="hashed_password" value="$2a$12$OZsgXBBCuTXUZB/LPnQCT.u/3PUMLe2fB2EkESDaUVBxOp/9uGEHW"/>
+            <column name="role" value="USER"/>
+        </insert>
+
+        <insert tableName="dip_user">
+            <column name="uuid" value="f05320b7-8e6d-4ca6-933d-9f2a6c2e7003"/>
+            <column name="email" value="user2@test.local"/>
+            <column name="login" value="user2"/>
+            <column name="hashed_password" value="$2a$12$OZsgXBBCuTXUZB/LPnQCT.u/3PUMLe2fB2EkESDaUVBxOp/9uGEHW"/>
+            <column name="role" value="USER"/>
+        </insert>
+
+        <insert tableName="dip_user">
+            <column name="uuid" value="f05320b7-8e6d-4ca6-933d-9f2a6c2e7004"/>
+            <column name="email" value="user3@test.local"/>
+            <column name="login" value="user3"/>
+            <column name="hashed_password" value="$2a$12$OZsgXBBCuTXUZB/LPnQCT.u/3PUMLe2fB2EkESDaUVBxOp/9uGEHW"/>
+            <column name="role" value="USER"/>
+        </insert>
+
+        <insert tableName="dip_user">
+            <column name="uuid" value="f05320b7-8e6d-4ca6-933d-9f2a6c2e7005"/>
+            <column name="email" value="user4@test.local"/>
+            <column name="login" value="user4"/>
+            <column name="hashed_password" value="$2a$12$OZsgXBBCuTXUZB/LPnQCT.u/3PUMLe2fB2EkESDaUVBxOp/9uGEHW"/>
+            <column name="role" value="USER"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
+

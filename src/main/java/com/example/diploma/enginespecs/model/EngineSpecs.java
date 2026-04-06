@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
@@ -34,6 +35,9 @@ public class EngineSpecs {
 
     @Column(nullable = false)
     private Long torque;
+
+    @Column(name = "engine_volume", nullable = false, precision = 5, scale = 2)
+    private BigDecimal engineVolume;
 
     @OneToOne(mappedBy = "engineSpecs")
     private Engine engine;

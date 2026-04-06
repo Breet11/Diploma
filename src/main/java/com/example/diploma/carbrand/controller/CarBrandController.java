@@ -5,11 +5,13 @@ import com.example.diploma.carbrand.service.CreateCarBrandService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -18,9 +20,20 @@ import java.util.UUID;
 public class CarBrandController {
     private final CreateCarBrandService createCarBrandService;
 
+    @GetMapping
+    public ResponseEntity<List<CarBrandListItem>> getCarBrands() {
+        List<CarBrandListItem> items = createCarBrandService.getAllCarBrands().stream()
+                .map(brand -> new CarBrandListItem(brand.getUuid(), brand.getName()))
+                .toList();
+        return ResponseEntity.ok(items);
+    }
+
     @PostMapping
     public ResponseEntity<UUID> createCarBrand(@Valid @RequestBody CreateCarBrandRequest createCarBrandRequest) {
         return ResponseEntity.ok(createCarBrandService.createCarBrand(createCarBrandRequest).getUuid());
+    }
+
+    public record CarBrandListItem(UUID uuid, String name) {
     }
 }
 

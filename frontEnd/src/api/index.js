@@ -33,6 +33,10 @@ export const api = {
     });
   },
 
+  getAdminRentalOrders() {
+    return http('/rentals/admin');
+  },
+
   getProfile() {
     return http('/profile/me');
   },
@@ -41,32 +45,61 @@ export const api = {
     return http('/car-brands', { method: 'POST', body: JSON.stringify(payload) });
   },
 
+  getCarBrands() {
+    return http('/car-brands');
+  },
+
   createCarModel(payload) {
     return http('/car-models', { method: 'POST', body: JSON.stringify(payload) });
+  },
+
+  getCarModels() {
+    return http('/car-models');
   },
 
   createEngineType(payload) {
     return http('/engine-types', { method: 'POST', body: JSON.stringify(payload) });
   },
 
+  getEngineTypes() {
+    return http('/engine-types');
+  },
+
   createEngineSpecs(payload) {
     return http('/engine-specs', { method: 'POST', body: JSON.stringify(payload) });
+  },
+
+  getEngineSpecs() {
+    return http('/engine-specs');
   },
 
   createEngine(payload) {
     return http('/engines', { method: 'POST', body: JSON.stringify(payload) });
   },
 
+  getEngines() {
+    return http('/engines');
+  },
+
   createCarSpecs(payload) {
     return http('/car-specs', { method: 'POST', body: JSON.stringify(payload) });
   },
 
-  createCar(payload) {
-    return http('/cars', { method: 'POST', body: JSON.stringify(payload) });
+  getCarSpecs() {
+    return http('/car-specs');
   },
 
-  createUser(payload) {
-    return http('/users', { method: 'POST', body: JSON.stringify(payload) });
+  createCar(payload, imageFile) {
+    const formData = new FormData();
+    formData.append('payload', new Blob([JSON.stringify(payload)], { type: 'application/json' }));
+    if (imageFile) {
+      formData.append('image', imageFile);
+    }
+    return http('/cars', { method: 'POST', body: formData });
+  },
+
+  getLoyaltyRules() {
+    return http('/loyalty-rules');
   },
 
   createLoyaltyRule(payload) {

@@ -6,4 +6,6 @@
     <include file="20260325-add-user-role.xml" relativeToChangelogFile="true"/>
     <include file="20260325-add-entity-relations.xml" relativeToChangelogFile="true"/>
     <include file="20260401-rental-loyalty-and-car-image.xml" relativeToChangelogFile="true"/>
+    <include file="20260402-admin-and-engine-image-updates.xml" relativeToChangelogFile="true"/>
+    <include file="20260406-seed-test-users.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

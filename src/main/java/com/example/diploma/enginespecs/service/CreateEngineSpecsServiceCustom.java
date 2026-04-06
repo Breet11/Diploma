@@ -23,6 +23,7 @@ public class CreateEngineSpecsServiceCustom implements CreateEngineSpecsService 
         engineSpecs.setFuelConsumption(createEngineSpecsRequest.fuelConsumption());
         engineSpecs.setHorsepower(createEngineSpecsRequest.horsepower());
         engineSpecs.setTorque(createEngineSpecsRequest.torque());
+        engineSpecs.setEngineVolume(createEngineSpecsRequest.engineVolume());
 
         return engineSpecsRepository.save(engineSpecs);
     }

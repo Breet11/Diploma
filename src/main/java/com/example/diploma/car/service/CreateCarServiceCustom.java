@@ -7,6 +7,7 @@ import com.example.diploma.carspecs.repository.CarSpecsRepository;
 import com.example.diploma.engine.repository.EngineRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -17,6 +18,11 @@ public class CreateCarServiceCustom implements CreateCarService {
 
     @Override
     public Car createCar(CreateCarRequest createCarRequest) {
+        return createCar(createCarRequest, null);
+    }
+
+    @Override
+    public Car createCar(CreateCarRequest createCarRequest, MultipartFile imageFile) {
         var engine = engineRepository.findById(createCarRequest.engineUuid())
                 .orElseThrow(() -> new IllegalArgumentException("Engine with id " + createCarRequest.engineUuid() + " not found"));
         var carSpecs = carSpecsRepository.findById(createCarRequest.carSpecsUuid())
@@ -26,7 +32,14 @@ public class CreateCarServiceCustom implements CreateCarService {
         car.setEngine(engine);
         car.setCarSpecs(carSpecs);
         car.setPrice(createCarRequest.price());
-        car.setImageUrl(createCarRequest.imageUrl());
+        if (imageFile != null && !imageFile.isEmpty()) {
+            try {
+                car.setImageBlob(imageFile.getBytes());
+                car.setImageContentType(imageFile.getContentType());
+            } catch (Exception exception) {
+                throw new IllegalArgumentException("Unable to read uploaded image", exception);
+            }
+        }
         car.setAvailable(createCarRequest.available());
 
         return carRepository.save(car);

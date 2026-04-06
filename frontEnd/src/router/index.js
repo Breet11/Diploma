@@ -47,6 +47,10 @@ const router = createRouter({
 });
 
 router.beforeEach((to) => {
+  if ((to.name === 'login' || to.name === 'register') && isAuthenticated()) {
+    return { name: 'profile' };
+  }
+
   if (to.meta.requiresAuth && !isAuthenticated()) {
     return { name: 'login' };
   }

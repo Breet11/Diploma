@@ -11,7 +11,8 @@ public record CarCatalogItemResponse(
         String acceleration,
         String engineType,
         Long hourlyRentalPrice,
-        String imageUrl,
+        String imageBase64,
+        String imageContentType,
         boolean available
 ) {
 }
