@@ -1,6 +1,7 @@
 import { http } from './http';
 
 export const api = {
+
   login(payload) {
     return http('/user/login', {
       method: 'POST',

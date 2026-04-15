@@ -1,71 +1,67 @@
 <script setup>
-import { onMounted, reactive, ref, watch } from 'vue';
+import { computed, onMounted, reactive, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 import BaseModal from '../components/ui/BaseModal.vue';
 import TextFieldBuilder from '../components/form/TextFieldBuilder.vue';
 import SelectFieldBuilder from '../components/form/SelectFieldBuilder.vue';
 import { api } from '../api';
+import { LOCALE_TAGS } from '../i18n';
+
+const { t, locale } = useI18n();
+const localeTag = computed(() => LOCALE_TAGS[locale.value] || LOCALE_TAGS.en);
 
 const entities = [
   {
     key: 'carBrand',
-    title: 'Бренды',
-    createTitle: 'Создать бренд',
     icon: 'mdi-tag-outline',
-    columns: [{ key: 'name', label: 'Название' }],
+    columns: [{ key: 'name' }],
     list: () => api.getCarBrands(),
     create: (payload) => api.createCarBrand(payload),
-    fields: [{ key: 'name', label: 'Название бренда' }]
+    fields: [{ key: 'name' }]
   },
   {
     key: 'carModel',
-    title: 'Модели',
-    createTitle: 'Создать модель',
     icon: 'mdi-car-info',
-    columns: [{ key: 'name', label: 'Название' }],
+    columns: [{ key: 'name' }],
     list: () => api.getCarModels(),
     create: (payload) => api.createCarModel(payload),
-    fields: [{ key: 'name', label: 'Название модели' }]
+    fields: [{ key: 'name' }]
   },
   {
     key: 'engineType',
-    title: 'Типы двигателя',
-    createTitle: 'Создать тип двигателя',
     icon: 'mdi-engine-outline',
-    columns: [{ key: 'engineType', label: 'Тип двигателя' }],
+    columns: [{ key: 'engineType' }],
     list: () => api.getEngineTypes(),
     create: (payload) => api.createEngineType(payload),
-    fields: [{ key: 'engineType', label: 'Тип двигателя' }]
+    fields: [{ key: 'engineType' }]
   },
   {
     key: 'engine',
-    title: 'Двигатели',
-    createTitle: 'Создать двигатель',
     icon: 'mdi-engine',
     columns: [
-      { key: 'engineName', label: 'Название двигателя' },
-      { key: 'engineType', label: 'Тип двигателя' },
-      { key: 'engineVolume', label: 'Объем, л' },
-      { key: 'horsepower', label: 'Лошадиные силы' },
-      { key: 'torque', label: 'Крутящий момент' },
-      { key: 'fuelConsumption', label: 'Расход топлива' }
+      { key: 'engineName' },
+      { key: 'engineType' },
+      { key: 'engineVolume' },
+      { key: 'horsepower' },
+      { key: 'torque' },
+      { key: 'fuelConsumption' }
     ],
     list: () => api.getEngines(),
     create: (payload) => api.createEngine(payload),
     fields: [
-      { key: 'engineName', label: 'Название двигателя' },
+      { key: 'engineName' },
       {
         key: 'engineTypeUuid',
-        label: 'Тип двигателя',
         type: 'select',
         source: {
           list: () => api.getEngineTypes(),
           label: (item) => item.engineType
         }
       },
-      { key: 'engineVolume', label: 'Объем двигателя (л)', type: 'number' },
-      { key: 'fuelConsumption', label: 'Расход топлива' },
-      { key: 'horsepower', label: 'Лошадиные силы', type: 'number' },
-      { key: 'torque', label: 'Крутящий момент', type: 'number' }
+      { key: 'engineVolume', type: 'number' },
+      { key: 'fuelConsumption' },
+      { key: 'horsepower', type: 'number' },
+      { key: 'torque', type: 'number' }
     ],
     normalize: (payload) => ({
       ...payload,
@@ -76,22 +72,19 @@ const entities = [
   },
   {
     key: 'carSpecs',
-    title: 'Характеристики авто',
-    createTitle: 'Создать характеристики авто',
     icon: 'mdi-card-text-outline',
     columns: [
-      { key: 'brand', label: 'Бренд' },
-      { key: 'model', label: 'Модель' },
-      { key: 'releaseYear', label: 'Год выпуска' },
-      { key: 'topSpeed', label: 'Макс. скорость' },
-      { key: 'acceleration', label: 'Разгон' }
+      { key: 'brand' },
+      { key: 'model' },
+      { key: 'releaseYear' },
+      { key: 'topSpeed' },
+      { key: 'acceleration' }
     ],
     list: () => api.getCarSpecs(),
     create: (payload) => api.createCarSpecs(payload),
     fields: [
       {
         key: 'carBrandUuid',
-        label: 'Бренд',
         type: 'select',
         source: {
           list: () => api.getCarBrands(),
@@ -100,16 +93,15 @@ const entities = [
       },
       {
         key: 'carModelUuid',
-        label: 'Модель',
         type: 'select',
         source: {
           list: () => api.getCarModels(),
           label: (item) => item.name
         }
       },
-      { key: 'releaseYear', label: 'Год выпуска', type: 'number' },
-      { key: 'topSpeed', label: 'Макс. скорость', type: 'number' },
-      { key: 'acceleration', label: 'Разгон 0-100' }
+      { key: 'releaseYear', type: 'number' },
+      { key: 'topSpeed', type: 'number' },
+      { key: 'acceleration' }
     ],
     normalize: (payload) => ({
       ...payload,
@@ -119,39 +111,35 @@ const entities = [
   },
   {
     key: 'car',
-    title: 'Автомобили',
-    createTitle: 'Создать автомобиль',
     icon: 'mdi-car-side',
     columns: [
-      { key: 'brand', label: 'Бренд' },
-      { key: 'model', label: 'Модель' },
-      { key: 'releaseYear', label: 'Год выпуска' },
-      { key: 'hourlyRentalPrice', label: 'Цена/час' },
-      { key: 'available', label: 'Доступность', format: (value) => (value ? 'Доступен' : 'Недоступен') }
+      { key: 'brand' },
+      { key: 'model' },
+      { key: 'releaseYear' },
+      { key: 'hourlyRentalPrice' },
+      { key: 'available', format: (value) => (value ? t('common.status.available') : t('common.status.unavailable')) }
     ],
     list: () => api.getCars(),
     create: (payload, imageFile) => api.createCar(payload, imageFile),
     fields: [
       {
         key: 'engineUuid',
-        label: 'Двигатель',
         type: 'select',
         source: {
           list: () => api.getEngines(),
-          label: (item) => `${item.engineName} (${item.engineType}, ${item.engineVolume} л)`
+          label: (item) => `${item.engineName} (${item.engineType}, ${item.engineVolume} ${t('carCard.liters')})`
         }
       },
       {
         key: 'carSpecsUuid',
-        label: 'Характеристики авто',
         type: 'select',
         source: {
           list: () => api.getCarSpecs(),
           label: (item) => `${item.brand} ${item.model}, ${item.releaseYear}`
         }
       },
-      { key: 'price', label: 'Базовая цена аренды / час', type: 'number' },
-      { key: 'available', label: 'Доступность', type: 'checkbox' }
+      { key: 'price', type: 'number' },
+      { key: 'available', type: 'checkbox' }
     ],
     hasFile: true,
     normalize: (payload) => ({
@@ -162,29 +150,26 @@ const entities = [
   },
   {
     key: 'loyalty',
-    title: 'Лояльность',
-    createTitle: 'Создать правило лояльности',
     icon: 'mdi-star-crescent-outline',
     columns: [
-      { key: 'minHours', label: 'Мин. часов' },
-      { key: 'maxHours', label: 'Макс. часов' },
-      { key: 'multiplier', label: 'Коэффициент' },
-      { key: 'active', label: 'Активно', format: (value) => (value ? 'Да' : 'Нет') }
+      { key: 'minHours' },
+      { key: 'maxHours' },
+      { key: 'multiplier' },
+      { key: 'active', format: (value) => (value ? t('common.status.yes') : t('common.status.no')) }
     ],
     list: () => api.getLoyaltyRules(),
     create: (payload) => api.createLoyaltyRule(payload),
     fields: [
-      { key: 'minHours', label: 'Мин. часов', type: 'number' },
-      { key: 'maxHours', label: 'Макс. часов (опционально)', type: 'number' },
-      { key: 'multiplier', label: 'Коэффициент', type: 'number' }
+      { key: 'minHours', type: 'number' },
+      { key: 'maxHours', type: 'number' },
+      { key: 'multiplier', type: 'number' }
     ],
     selects: [
       {
         key: 'active',
-        label: 'Активно',
         options: [
-          { label: 'Да', value: 'true' },
-          { label: 'Нет', value: 'false' }
+          { labelKey: 'common.status.yes', value: 'true' },
+          { labelKey: 'common.status.no', value: 'false' }
         ]
       }
     ],
@@ -198,17 +183,15 @@ const entities = [
   },
   {
     key: 'rentalOrders',
-    title: 'Заявки на аренду',
-    createTitle: 'Заявки на аренду',
     icon: 'mdi-clipboard-text-clock-outline',
     columns: [
-      { key: 'customer', label: 'Клиент' },
-      { key: 'phone', label: 'Телефон' },
-      { key: 'car', label: 'Автомобиль' },
-      { key: 'hours', label: 'Часы аренды' },
-      { key: 'totalPrice', label: 'Сумма' },
-      { key: 'status', label: 'Статус' },
-      { key: 'createdAt', label: 'Дата заявки', format: (value) => new Date(value).toLocaleString('ru-RU') }
+      { key: 'customer' },
+      { key: 'phone' },
+      { key: 'car' },
+      { key: 'hours' },
+      { key: 'totalPrice' },
+      { key: 'status' },
+      { key: 'createdAt', format: (value) => new Date(value).toLocaleString(localeTag.value) }
     ],
     list: () => api.getAdminRentalOrders(),
     readOnly: true
@@ -228,6 +211,37 @@ const imageFile = ref(null);
 const referenceOptions = reactive({});
 const errorMessage = ref('');
 const successMessage = ref('');
+
+function entityPath(entity, segment, fieldKey = null) {
+  return fieldKey ? `admin.entities.${entity.key}.${segment}.${fieldKey}` : `admin.entities.${entity.key}.${segment}`;
+}
+
+function getEntityTitle(entity) {
+  return t(entityPath(entity, 'title'));
+}
+
+function getEntityCreateTitle(entity) {
+  return t(entityPath(entity, 'createTitle'));
+}
+
+function getColumnLabel(entity, column) {
+  return t(entityPath(entity, 'columns', column.key));
+}
+
+function getFieldLabel(entity, field) {
+  return t(entityPath(entity, 'fields', field.key));
+}
+
+function getSelectLabel(entity, select) {
+  return t(entityPath(entity, 'fields', select.key));
+}
+
+function getSelectOptions(select) {
+  return select.options.map((option) => ({
+    ...option,
+    label: option.labelKey ? t(option.labelKey) : option.label
+  }));
+}
 
 function createDropdownOption(item, labelFactory) {
   const { uuid, ...data } = item;
@@ -332,7 +346,7 @@ async function submit() {
     }
 
     await currentAction.value.entity.create(payload, imageFile.value);
-    successMessage.value = 'Запись успешно создана';
+    successMessage.value = t('admin.createSuccess');
     await loadRows();
   } catch (error) {
     errorMessage.value = error.message;
@@ -344,11 +358,11 @@ onMounted(loadRows);
 
 <template>
   <section class="page">
-    <h1 class="page__title">Админ панель</h1>
+    <h1 class="page__title">{{ t('admin.title') }}</h1>
 
     <div class="admin-layout">
       <aside class="admin-sidebar">
-        <p class="admin-sidebar__title">Справочники</p>
+        <p class="admin-sidebar__title">{{ t('admin.sidebarTitle') }}</p>
         <button
           v-for="entity in entities"
           :key="entity.key"
@@ -358,44 +372,44 @@ onMounted(loadRows);
           @click="activeEntityKey = entity.key"
         >
           <i class="mdi" :class="entity.icon"></i>
-          {{ entity.title }}
+          {{ getEntityTitle(entity) }}
         </button>
       </aside>
 
       <div class="admin-main">
         <div class="admin-main__header">
-          <h2 class="admin-main__title">{{ activeEntity.title }}</h2>
+          <h2 class="admin-main__title">{{ getEntityTitle(activeEntity) }}</h2>
           <button
             v-if="!activeEntity.readOnly"
             type="button"
             class="btn admin-icon-btn"
-            :title="activeEntity.createTitle"
+            :title="getEntityCreateTitle(activeEntity)"
             @click="openCreate"
           >
             <i class="mdi mdi-plus"></i>
           </button>
         </div>
 
-        <p v-if="loading">Загрузка...</p>
+        <p v-if="loading">{{ t('common.loading') }}</p>
         <p v-else-if="tableError" class="text-error">{{ tableError }}</p>
 
         <table v-else class="admin-table">
           <thead>
             <tr>
-              <th v-for="column in activeEntity.columns" :key="column.key">{{ column.label }}</th>
-              <th v-if="!activeEntity.readOnly">Действия</th>
+              <th v-for="column in activeEntity.columns" :key="column.key">{{ getColumnLabel(activeEntity, column) }}</th>
+              <th v-if="!activeEntity.readOnly">{{ t('common.labels.actions') }}</th>
             </tr>
           </thead>
           <tbody>
             <tr v-if="rows.length === 0">
-              <td :colspan="activeEntity.columns.length + (activeEntity.readOnly ? 0 : 1)">Нет данных</td>
+              <td :colspan="activeEntity.columns.length + (activeEntity.readOnly ? 0 : 1)">{{ t('admin.empty') }}</td>
             </tr>
             <tr v-for="row in rows" :key="row.uuid">
               <td v-for="column in activeEntity.columns" :key="column.key">
                 {{ column.format ? column.format(row[column.key]) : row[column.key] }}
               </td>
               <td v-if="!activeEntity.readOnly">
-                <button type="button" class="btn btn--ghost admin-icon-btn" title="Редактировать" @click="openEdit(row)">
+                <button type="button" class="btn btn--ghost admin-icon-btn" :title="t('common.actions.edit')" @click="openEdit(row)">
                   <i class="mdi mdi-file-document-edit-outline"></i>
                 </button>
               </td>
@@ -407,34 +421,34 @@ onMounted(loadRows);
 
     <BaseModal
       :is-open="Boolean(currentAction)"
-      :title="currentAction?.mode === 'edit' ? 'Редактирование' : currentAction?.entity?.createTitle || ''"
+      :title="currentAction?.mode === 'edit' ? t('admin.editDialogTitle') : (currentAction?.entity ? getEntityCreateTitle(currentAction.entity) : '')"
       @close="close"
     >
       <div v-if="currentAction?.mode === 'edit'" class="form-grid">
-        <p>Редактирование UI уже готово. Для сохранения нужно добавить backend PUT/PATCH endpoints.</p>
+        <p>{{ t('admin.editNotImplemented') }}</p>
         <div class="form-actions">
-          <button type="button" class="btn" @click="close">Понятно</button>
+          <button type="button" class="btn" @click="close">{{ t('common.actions.understood') }}</button>
         </div>
       </div>
 
       <form v-else-if="currentAction" class="form-grid" @submit.prevent="submit">
         <template v-for="field in currentAction.entity.fields" :key="field.key">
           <div v-if="field.type === 'checkbox'" class="field">
-            <label :for="field.key" class="field__label">{{ field.label }}</label>
+            <label :for="field.key" class="field__label">{{ getFieldLabel(currentAction.entity, field) }}</label>
             <input :id="field.key" v-model="form[field.key]" type="checkbox" class="field__checkbox" />
           </div>
           <SelectFieldBuilder
             v-else-if="field.type === 'select'"
             :id="field.key"
             v-model="form[field.key]"
-            :label="field.label"
+            :label="getFieldLabel(currentAction.entity, field)"
             :options="getFieldOptions(field)"
           />
           <TextFieldBuilder
             v-else
             :id="field.key"
             v-model="form[field.key]"
-            :label="field.label"
+            :label="getFieldLabel(currentAction.entity, field)"
             :type="field.type || 'text'"
           />
         </template>
@@ -444,12 +458,12 @@ onMounted(loadRows);
           :id="select.key"
           :key="select.key"
           v-model="form[select.key]"
-          :label="select.label"
-          :options="select.options"
+          :label="getSelectLabel(currentAction.entity, select)"
+          :options="getSelectOptions(select)"
         />
 
         <div v-if="currentAction.entity.hasFile" class="field">
-          <label class="field__label" for="carImage">Фото автомобиля</label>
+          <label class="field__label" for="carImage">{{ t('admin.entities.car.fields.image') }}</label>
           <input id="carImage" class="field__control" type="file" accept="image/*" @change="onFileChange" />
         </div>
 
@@ -457,8 +471,8 @@ onMounted(loadRows);
         <p v-if="errorMessage" class="text-error">{{ errorMessage }}</p>
 
         <div class="form-actions">
-          <button type="button" class="btn btn--ghost" @click="close">Закрыть</button>
-          <button type="submit" class="btn">Создать</button>
+          <button type="button" class="btn btn--ghost" @click="close">{{ t('common.actions.close') }}</button>
+          <button type="submit" class="btn">{{ t('common.actions.create') }}</button>
         </div>
       </form>
     </BaseModal>

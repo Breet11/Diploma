@@ -1,5 +1,6 @@
 package com.example.diploma.user.controller;
 
+import com.example.diploma.utils.HTTP.HttpSpecs;
 import com.example.diploma.user.dto.AuthMessageResponseDto;
 import com.example.diploma.user.dto.LoginRequestDto;
 import com.example.diploma.user.dto.LoginResponseDto;
@@ -15,17 +16,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping(HttpSpecs.User.Auth.ROOT)
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;
 
-    @PostMapping("/login")
+    @PostMapping(HttpSpecs.User.Auth.LOGIN)
     public ResponseEntity<LoginResponseDto> login(@Valid @RequestBody LoginRequestDto loginRequestDto) {
         return ResponseEntity.ok(authService.login(loginRequestDto));
     }
 
-    @PostMapping("/register")
+    @PostMapping(HttpSpecs.User.Auth.REGISTER)
     public ResponseEntity<AuthMessageResponseDto> register(@Valid @RequestBody RegisterRequestDto registerRequestDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(registerRequestDto));
     }

@@ -3,6 +3,7 @@ package com.example.diploma.loyalty.controller;
 import com.example.diploma.loyalty.dto.CreateLoyaltyRuleRequest;
 import com.example.diploma.loyalty.repository.LoyaltyRuleRepository;
 import com.example.diploma.loyalty.service.CreateLoyaltyRuleService;
+import com.example.diploma.utils.HTTP.HttpSpecs;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,13 +19,13 @@ import java.util.UUID;
 import java.util.stream.StreamSupport;
 
 @RestController
-@RequestMapping("/loyalty-rules")
+@RequestMapping(HttpSpecs.LoyaltyRule.ROOT)
 @RequiredArgsConstructor
 public class LoyaltyRuleController {
     private final CreateLoyaltyRuleService createLoyaltyRuleService;
     private final LoyaltyRuleRepository loyaltyRuleRepository;
 
-    @GetMapping
+    @GetMapping(HttpSpecs.LoyaltyRule.GET_ALL)
     public ResponseEntity<List<LoyaltyRuleListItem>> getLoyaltyRules() {
         List<LoyaltyRuleListItem> items = StreamSupport.stream(loyaltyRuleRepository.findAll().spliterator(), false)
                 .map(rule -> new LoyaltyRuleListItem(
@@ -38,7 +39,7 @@ public class LoyaltyRuleController {
         return ResponseEntity.ok(items);
     }
 
-    @PostMapping
+    @PostMapping(HttpSpecs.LoyaltyRule.CREATE)
     public ResponseEntity<UUID> createLoyaltyRule(@Valid @RequestBody CreateLoyaltyRuleRequest createLoyaltyRuleRequest) {
         return ResponseEntity.ok(createLoyaltyRuleService.createLoyaltyRule(createLoyaltyRuleRequest).getUuid());
     }

@@ -3,6 +3,7 @@ package com.example.diploma.enginespecs.controller;
 import com.example.diploma.enginespecs.dto.CreateEngineSpecsRequest;
 import com.example.diploma.enginespecs.repository.EngineSpecsRepository;
 import com.example.diploma.enginespecs.service.CreateEngineSpecsService;
+import com.example.diploma.utils.HTTP.HttpSpecs;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,13 +18,13 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/engine-specs")
+@RequestMapping(HttpSpecs.EngineSpecs.ROOT)
 @RequiredArgsConstructor
 public class EngineSpecsController {
     private final CreateEngineSpecsService createEngineSpecsService;
     private final EngineSpecsRepository engineSpecsRepository;
 
-    @GetMapping
+    @GetMapping(HttpSpecs.EngineSpecs.GET_ALL)
     public ResponseEntity<List<EngineSpecsListItem>> getEngineSpecs() {
         List<EngineSpecsListItem> items = engineSpecsRepository.findAll().stream()
                 .map(specs -> new EngineSpecsListItem(
@@ -38,7 +39,7 @@ public class EngineSpecsController {
         return ResponseEntity.ok(items);
     }
 
-    @PostMapping
+    @PostMapping(HttpSpecs.EngineSpecs.CREATE)
     public ResponseEntity<UUID> createEngineSpecs(@Valid @RequestBody CreateEngineSpecsRequest createEngineSpecsRequest) {
         return ResponseEntity.ok(createEngineSpecsService.createEngineSpecs(createEngineSpecsRequest).getUuid());
     }

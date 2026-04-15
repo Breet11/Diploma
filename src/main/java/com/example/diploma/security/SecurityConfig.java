@@ -1,6 +1,7 @@
 package com.example.diploma.security;
 
 import com.example.diploma.security.jwt.JwtAuthenticationFilter;
+import com.example.diploma.utils.HTTP.HttpSpecs;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -39,31 +40,34 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/user/login", "/user/register").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/cars").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/rentals", "/rentals/price").permitAll()
-                        .requestMatchers("/profile/**").authenticated()
+                        .requestMatchers(
+                                HttpSpecs.User.Auth.LOGIN_ENDPOINT,
+                                HttpSpecs.User.Auth.REGISTER_ENDPOINT
+                        ).permitAll()
+                        .requestMatchers(HttpMethod.GET, HttpSpecs.Car.GET_CATALOG_ENDPOINT).permitAll()
+                        .requestMatchers(HttpMethod.POST, HttpSpecs.Rental.CREATE_ENDPOINT, HttpSpecs.Rental.CALCULATE_PRICE_ENDPOINT).permitAll()
+                        .requestMatchers(HttpSpecs.User.Profile.ALL_ENDPOINTS).authenticated()
                         .requestMatchers(HttpMethod.POST,
-                                "/cars",
-                                "/car-brands",
-                                "/car-models",
-                                "/car-specs",
-                                "/engines",
-                                "/engine-specs",
-                                "/engine-types",
-                                "/loyalty-rules"
+                                HttpSpecs.Car.CREATE_ENDPOINT,
+                                HttpSpecs.CarBrand.CREATE_ENDPOINT,
+                                HttpSpecs.CarModel.CREATE_ENDPOINT,
+                                HttpSpecs.CarSpecs.CREATE_ENDPOINT,
+                                HttpSpecs.Engine.CREATE_ENDPOINT,
+                                HttpSpecs.EngineSpecs.CREATE_ENDPOINT,
+                                HttpSpecs.EngineType.CREATE_ENDPOINT,
+                                HttpSpecs.LoyaltyRule.CREATE_ENDPOINT
                         ).hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET,
-                                "/car-brands",
-                                "/car-models",
-                                "/car-specs",
-                                "/engines",
-                                "/engine-specs",
-                                "/engine-types",
-                                "/loyalty-rules",
-                                "/rentals/admin"
+                                HttpSpecs.CarBrand.GET_ALL_ENDPOINT,
+                                HttpSpecs.CarModel.GET_ALL_ENDPOINT,
+                                HttpSpecs.CarSpecs.GET_ALL_ENDPOINT,
+                                HttpSpecs.Engine.GET_ALL_ENDPOINT,
+                                HttpSpecs.EngineSpecs.GET_ALL_ENDPOINT,
+                                HttpSpecs.EngineType.GET_ALL_ENDPOINT,
+                                HttpSpecs.LoyaltyRule.GET_ALL_ENDPOINT,
+                                HttpSpecs.Rental.GET_ADMIN_ORDERS_ENDPOINT
                         ).hasRole("ADMIN")
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers(HttpSpecs.Admin.ALL_ENDPOINTS).hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())

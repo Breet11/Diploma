@@ -8,6 +8,7 @@ import com.example.diploma.rental.dto.RentalOrderAdminListItemResponse;
 import com.example.diploma.rental.service.CalculateRentalPriceService;
 import com.example.diploma.rental.service.CreateRentalService;
 import com.example.diploma.rental.service.GetRentalOrdersService;
+import com.example.diploma.utils.HTTP.HttpSpecs;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,24 +22,24 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/rentals")
+@RequestMapping(HttpSpecs.Rental.ROOT)
 @RequiredArgsConstructor
 public class RentalController {
     private final CreateRentalService createRentalService;
     private final CalculateRentalPriceService calculateRentalPriceService;
     private final GetRentalOrdersService getRentalOrdersService;
 
-    @GetMapping("/admin")
+    @GetMapping(HttpSpecs.Rental.GET_ADMIN_ORDERS)
     public ResponseEntity<List<RentalOrderAdminListItemResponse>> getRentalOrdersForAdmin() {
         return ResponseEntity.ok(getRentalOrdersService.getRentalOrders());
     }
 
-    @PostMapping("/price")
+    @PostMapping(HttpSpecs.Rental.CALCULATE_PRICE)
     public ResponseEntity<CalculateRentalPriceResponse> calculatePrice(@Valid @RequestBody CalculateRentalPriceRequest calculateRentalPriceRequest) {
         return ResponseEntity.ok(calculateRentalPriceService.calculatePrice(calculateRentalPriceRequest));
     }
 
-    @PostMapping
+    @PostMapping(HttpSpecs.Rental.CREATE)
     public ResponseEntity<CreateRentalResponse> createRental(
             @Valid @RequestBody CreateRentalRequest createRentalRequest,
             Authentication authentication

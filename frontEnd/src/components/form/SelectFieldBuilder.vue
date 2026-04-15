@@ -1,10 +1,13 @@
 <script setup>
+import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
+
 const model = defineModel({
   type: [String, Number],
   default: ''
 });
 
-defineProps({
+const props = defineProps({
   id: {
     type: String,
     required: true
@@ -19,20 +22,23 @@ defineProps({
   },
   placeholder: {
     type: String,
-    default: 'Выберите значение'
+    default: ''
   }
 });
+
+const { t } = useI18n();
+const resolvedPlaceholder = computed(() => props.placeholder || t('common.selectPlaceholder'));
 </script>
 
 <template>
-  <div class="field">
-    <label :for="id" class="field__label">{{ label }}</label>
-    <select :id="id" v-model="model" class="field__control">
-      <option disabled value="">{{ placeholder }}</option>
-      <option v-for="option in options" :key="option.value" :value="option.value">
-        {{ option.label }}
-      </option>
-    </select>
-  </div>
+  <v-select
+    :id="props.id"
+    v-model="model"
+    :label="props.label"
+    :placeholder="resolvedPlaceholder"
+    :items="props.options"
+    item-title="label"
+    item-value="value"
+  />
 </template>
 

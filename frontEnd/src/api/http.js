@@ -1,4 +1,5 @@
 import { clearAuth, getToken } from '../utils/auth';
+import i18n from '../i18n';
 
 const BASE_URL = 'http://localhost:8080';
 
@@ -29,7 +30,7 @@ export async function http(path, options = {}) {
     if (response.status === 401 || response.status === 403) {
       clearAuth();
     }
-    throw new Error(data?.message || data || `Request failed: ${response.status}`);
+    throw new Error(data?.message || data || i18n.global.t('errors.requestFailed', { status: response.status }));
   }
 
   return data;

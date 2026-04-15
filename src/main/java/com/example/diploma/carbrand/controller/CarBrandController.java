@@ -2,6 +2,7 @@ package com.example.diploma.carbrand.controller;
 
 import com.example.diploma.carbrand.dto.CreateCarBrandRequest;
 import com.example.diploma.carbrand.service.CreateCarBrandService;
+import com.example.diploma.utils.HTTP.HttpSpecs;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,12 +16,12 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/car-brands")
+@RequestMapping(HttpSpecs.CarBrand.ROOT)
 @RequiredArgsConstructor
 public class CarBrandController {
     private final CreateCarBrandService createCarBrandService;
 
-    @GetMapping
+    @GetMapping(HttpSpecs.CarBrand.GET_ALL)
     public ResponseEntity<List<CarBrandListItem>> getCarBrands() {
         List<CarBrandListItem> items = createCarBrandService.getAllCarBrands().stream()
                 .map(brand -> new CarBrandListItem(brand.getUuid(), brand.getName()))
@@ -28,7 +29,7 @@ public class CarBrandController {
         return ResponseEntity.ok(items);
     }
 
-    @PostMapping
+    @PostMapping(HttpSpecs.CarBrand.CREATE)
     public ResponseEntity<UUID> createCarBrand(@Valid @RequestBody CreateCarBrandRequest createCarBrandRequest) {
         return ResponseEntity.ok(createCarBrandService.createCarBrand(createCarBrandRequest).getUuid());
     }

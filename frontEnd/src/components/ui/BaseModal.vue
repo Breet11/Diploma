@@ -11,27 +11,21 @@ defineProps({
 });
 
 const emit = defineEmits(['close']);
-
-function onBackdropClick(event) {
-  if (event.target === event.currentTarget) {
-    emit('close');
-  }
-}
 </script>
 
 <template>
-  <Teleport to="body">
-    <div v-if="isOpen" class="modal" @click="onBackdropClick">
-      <div class="modal__dialog">
-        <header class="modal__header">
-          <h2 class="modal__title">{{ title }}</h2>
-          <button class="modal__close" type="button" @click="$emit('close')">x</button>
-        </header>
-        <div class="modal__content">
-          <slot />
-        </div>
-      </div>
-    </div>
-  </Teleport>
+  <v-dialog :model-value="isOpen" @update:model-value="emit('close')">
+    <v-card>
+      <v-card-title class="d-flex align-center justify-space-between">
+        <span>{{ title }}</span>
+        <v-btn icon variant="text" @click="emit('close')">
+          <v-icon icon="mdi-close" />
+        </v-btn>
+      </v-card-title>
+      <v-card-text>
+        <slot />
+      </v-card-text>
+    </v-card>
+  </v-dialog>
 </template>
 

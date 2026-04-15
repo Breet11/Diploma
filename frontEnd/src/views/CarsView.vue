@@ -1,11 +1,14 @@
 <script setup>
 import { computed, reactive, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 import CarCard from '../components/car/CarCard.vue';
 import BaseModal from '../components/ui/BaseModal.vue';
 import TextFieldBuilder from '../components/form/TextFieldBuilder.vue';
 import { api } from '../api';
+import { LOCALE_TAGS } from '../i18n';
 import { isAuthenticated } from '../utils/auth';
 
+const { t, locale } = useI18n();
 const cars = ref([]);
 const selectedCar = ref(null);
 const loading = ref(false);
@@ -24,6 +27,7 @@ const rentalForm = reactive({
 
 const priceInfo = ref(null);
 
+const localeTag = computed(() => LOCALE_TAGS[locale.value] || LOCALE_TAGS.en);
 const authorized = computed(() => isAuthenticated());
 const canSubmitRental = computed(() => {
   if (!selectedCar.value || !rentalForm.hours || Number(rentalForm.hours) <= 0) {
@@ -116,39 +120,39 @@ loadCars();
 <template>
   <section class="page">
     <div class="page__toolbar">
-      <h1 class="page__title">Аренда автомобилей</h1>
+      <h1 class="page__title">{{ t('cars.title') }}</h1>
     </div>
 
-    <p v-if="loading">Загрузка...</p>
+    <p v-if="loading">{{ t('common.loading') }}</p>
     <p v-else-if="errorMessage" class="text-error">{{ errorMessage }}</p>
 
     <div v-else class="cars-grid">
       <CarCard v-for="car in cars" :key="car.uuid" :car="car" @rent="openRentalModal" />
     </div>
 
-    <BaseModal :is-open="isRentalModalOpen" title="Оформление аренды" @close="closeRentalModal">
+    <BaseModal :is-open="isRentalModalOpen" :title="t('cars.rentModalTitle')" @close="closeRentalModal">
       <form class="form-grid" @submit.prevent="submitRental">
         <p v-if="selectedCar"><strong>{{ selectedCar.brand }} {{ selectedCar.model }}</strong></p>
 
-        <TextFieldBuilder id="hours" v-model="rentalForm.hours" type="number" label="Длительность аренды (часы)" />
+        <TextFieldBuilder id="hours" v-model="rentalForm.hours" type="number" :label="t('common.labels.hours')" />
 
         <template v-if="!authorized">
-          <TextFieldBuilder id="firstName" v-model="rentalForm.firstName" label="Имя" />
-          <TextFieldBuilder id="lastName" v-model="rentalForm.lastName" label="Фамилия" />
-          <TextFieldBuilder id="phone" v-model="rentalForm.phone" label="Номер телефона" placeholder="+7..." />
+          <TextFieldBuilder id="firstName" v-model="rentalForm.firstName" :label="t('common.labels.firstName')" />
+          <TextFieldBuilder id="lastName" v-model="rentalForm.lastName" :label="t('common.labels.lastName')" />
+          <TextFieldBuilder id="phone" v-model="rentalForm.phone" :label="t('common.labels.phone')" placeholder="+7..." />
         </template>
 
         <p v-if="priceInfo" class="price-preview">
-          Стоимость: <strong>{{ Number(priceInfo.totalPrice).toLocaleString('ru-RU') }} ₽</strong>
-          (коэффициент лояльности: {{ priceInfo.multiplier }})
+          {{ t('cars.price') }}: <strong>{{ Number(priceInfo.totalPrice).toLocaleString(localeTag) }} ₽</strong>
+          ({{ t('cars.loyaltyMultiplier') }}: {{ priceInfo.multiplier }})
         </p>
 
         <p v-if="rentalSuccessMessage" class="text-success">{{ rentalSuccessMessage }}</p>
         <p v-if="rentalErrorMessage" class="text-error">{{ rentalErrorMessage }}</p>
 
         <div class="form-actions">
-          <button type="button" class="btn btn--ghost" @click="closeRentalModal">Закрыть</button>
-          <button type="submit" class="btn" :disabled="!canSubmitRental">Отправить заявку</button>
+          <button type="button" class="btn btn--ghost" @click="closeRentalModal">{{ t('common.actions.close') }}</button>
+          <button type="submit" class="btn" :disabled="!canSubmitRental">{{ t('common.actions.submitRequest') }}</button>
         </div>
       </form>
     </BaseModal>

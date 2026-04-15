@@ -3,6 +3,7 @@ package com.example.diploma.carspecs.controller;
 import com.example.diploma.carspecs.dto.CreateCarSpecsRequest;
 import com.example.diploma.carspecs.repository.CarSpecsRepository;
 import com.example.diploma.carspecs.service.CreateCarSpecsService;
+import com.example.diploma.utils.HTTP.HttpSpecs;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,13 +17,13 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/car-specs")
+@RequestMapping(HttpSpecs.CarSpecs.ROOT)
 @RequiredArgsConstructor
 public class CarSpecsController {
     private final CreateCarSpecsService createCarSpecsService;
     private final CarSpecsRepository carSpecsRepository;
 
-    @GetMapping
+    @GetMapping(HttpSpecs.CarSpecs.GET_ALL)
     public ResponseEntity<List<CarSpecsListItem>> getCarSpecs() {
         List<CarSpecsListItem> items = carSpecsRepository.findAll().stream()
                 .map(specs -> new CarSpecsListItem(
@@ -37,7 +38,7 @@ public class CarSpecsController {
         return ResponseEntity.ok(items);
     }
 
-    @PostMapping
+    @PostMapping(HttpSpecs.CarSpecs.CREATE)
     public ResponseEntity<UUID> createCarSpecs(@Valid @RequestBody CreateCarSpecsRequest createCarSpecsRequest) {
         return ResponseEntity.ok(createCarSpecsService.createCarSpecs(createCarSpecsRequest).getUuid());
     }

@@ -3,11 +3,13 @@ import AppHeader from './components/layout/AppHeader.vue';
 </script>
 
 <template>
-  <div class="app-shell">
+  <v-app class="app-shell">
     <AppHeader />
-    <main class="app-content">
-      <RouterView />
-    </main>
-  </div>
+    <v-main>
+      <v-container class="app-content">
+        <RouterView />
+      </v-container>
+    </v-main>
+  </v-app>
 </template>
 

@@ -23,16 +23,18 @@ public class AuthServiceCustom implements AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final DecryptAuthPasswordService decryptAuthPasswordService;
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthServiceCustom.class);
 
     @Override
     public LoginResponseDto login(LoginRequestDto loginRequestDto) {
         LOGGER.info("Trying to authenticate user [{}]", loginRequestDto.login());
+        String decryptedPassword = decryptAuthPasswordService.decrypt(loginRequestDto.password());
 
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequestDto.login(),
-                        loginRequestDto.password()
+                        decryptedPassword
                 )
         );
 
@@ -57,11 +59,13 @@ public class AuthServiceCustom implements AuthService {
                     );
                 });
 
+        String decryptedPassword = decryptAuthPasswordService.decrypt(registerRequestDto.password());
+
         User user = new User(
                 null,
                 registerRequestDto.email(),
                 registerRequestDto.login(),
-                passwordEncoder.encode(registerRequestDto.password()),
+                passwordEncoder.encode(decryptedPassword),
                 Role.USER
         );
         userRepository.save(user);

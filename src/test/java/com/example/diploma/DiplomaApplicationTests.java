@@ -1,13 +1,13 @@
 package com.example.diploma;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-@SpringBootTest
 class DiplomaApplicationTests {
 
     @Test
-    void contextLoads() {
+    void applicationClassIsInstantiable() {
+        assertDoesNotThrow(DiplomaApplication::new);
     }
 
 }

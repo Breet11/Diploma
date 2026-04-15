@@ -3,6 +3,7 @@ package com.example.diploma.engine.controller;
 import com.example.diploma.engine.dto.CreateEngineRequest;
 import com.example.diploma.engine.repository.EngineRepository;
 import com.example.diploma.engine.service.CreateEngineService;
+import com.example.diploma.utils.HTTP.HttpSpecs;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,13 +18,13 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/engines")
+@RequestMapping(HttpSpecs.Engine.ROOT)
 @RequiredArgsConstructor
 public class EngineController {
     private final CreateEngineService createEngineService;
     private final EngineRepository engineRepository;
 
-    @GetMapping
+    @GetMapping(HttpSpecs.Engine.GET_ALL)
     public ResponseEntity<List<EngineListItem>> getEngines() {
         List<EngineListItem> items = engineRepository.findAll().stream()
                 .map(engine -> new EngineListItem(
@@ -39,7 +40,7 @@ public class EngineController {
         return ResponseEntity.ok(items);
     }
 
-    @PostMapping
+    @PostMapping(HttpSpecs.Engine.CREATE)
     public ResponseEntity<UUID> createEngine(@Valid @RequestBody CreateEngineRequest createEngineRequest) {
         return ResponseEntity.ok(createEngineService.createEngine(createEngineRequest).getUuid());
     }
