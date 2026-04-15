@@ -5,9 +5,11 @@ import BaseModal from '../components/ui/BaseModal.vue';
 import TextFieldBuilder from '../components/form/TextFieldBuilder.vue';
 import SelectFieldBuilder from '../components/form/SelectFieldBuilder.vue';
 import { api } from '../api';
+import { useToast } from '../composables/useToast';
 import { LOCALE_TAGS } from '../i18n';
 
 const { t, locale } = useI18n();
+const { success: showSuccess, error: showError } = useToast();
 const localeTag = computed(() => LOCALE_TAGS[locale.value] || LOCALE_TAGS.en);
 
 const entities = [
@@ -292,6 +294,7 @@ async function openCreate() {
     await loadReferenceOptions(activeEntity.value);
   } catch (error) {
     errorMessage.value = error.message;
+    showError(error.message);
   }
 
   activeEntity.value.fields?.forEach((field) => {
@@ -326,6 +329,7 @@ async function loadRows() {
     rows.value = await activeEntity.value.list();
   } catch (error) {
     tableError.value = error.message;
+    showError(error.message);
   } finally {
     loading.value = false;
   }
@@ -347,9 +351,12 @@ async function submit() {
 
     await currentAction.value.entity.create(payload, imageFile.value);
     successMessage.value = t('admin.createSuccess');
+    showSuccess(successMessage.value);
     await loadRows();
+    close();
   } catch (error) {
     errorMessage.value = error.message;
+    showError(error.message);
   }
 }
 

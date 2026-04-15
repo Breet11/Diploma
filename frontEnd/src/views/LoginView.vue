@@ -1,15 +1,16 @@
 <script setup>
-import { reactive, ref } from 'vue';
+import { reactive } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import TextFieldBuilder from '../components/form/TextFieldBuilder.vue';
 import { api } from '../api';
+import { useToast } from '../composables/useToast';
 import { saveAuth } from '../utils/auth';
 import { encryptAuthPassword } from '../utils/crypto';
 
 const router = useRouter();
 const { t } = useI18n();
-const errorMessage = ref('');
+const { error: showError } = useToast();
 
 const form = reactive({
   login: '',
@@ -17,7 +18,6 @@ const form = reactive({
 });
 
 async function submit() {
-  errorMessage.value = '';
   try {
     const auth = await api.login({
       ...form,
@@ -26,7 +26,7 @@ async function submit() {
     saveAuth(auth);
     router.push({ name: 'profile' });
   } catch (error) {
-    errorMessage.value = error.message;
+    showError(error.message);
   }
 }
 </script>
@@ -37,7 +37,6 @@ async function submit() {
     <form class="form-grid" @submit.prevent="submit">
       <TextFieldBuilder id="login" v-model="form.login" :label="t('common.labels.login')" />
       <TextFieldBuilder id="password" v-model="form.password" :label="t('common.labels.password')" type="password" />
-      <p v-if="errorMessage" class="text-error">{{ errorMessage }}</p>
       <div class="form-actions">
         <button type="button" class="btn btn--ghost" @click="router.push({ name: 'register' })">
           <i class="mdi mdi-account-plus-outline"></i>

@@ -5,18 +5,17 @@ import CarCard from '../components/car/CarCard.vue';
 import BaseModal from '../components/ui/BaseModal.vue';
 import TextFieldBuilder from '../components/form/TextFieldBuilder.vue';
 import { api } from '../api';
+import { useToast } from '../composables/useToast';
 import { LOCALE_TAGS } from '../i18n';
 import { isAuthenticated } from '../utils/auth';
 
 const { t, locale } = useI18n();
+const { success: showSuccess, error: showError } = useToast();
 const cars = ref([]);
 const selectedCar = ref(null);
 const loading = ref(false);
-const errorMessage = ref('');
 
 const isRentalModalOpen = ref(false);
-const rentalSuccessMessage = ref('');
-const rentalErrorMessage = ref('');
 
 const rentalForm = reactive({
   hours: 1,
@@ -43,11 +42,10 @@ const canSubmitRental = computed(() => {
 
 async function loadCars() {
   loading.value = true;
-  errorMessage.value = '';
   try {
     cars.value = await api.getCars();
   } catch (error) {
-    errorMessage.value = error.message;
+    showError(error.message);
   } finally {
     loading.value = false;
   }
@@ -56,8 +54,6 @@ async function loadCars() {
 function openRentalModal(car) {
   selectedCar.value = car;
   isRentalModalOpen.value = true;
-  rentalSuccessMessage.value = '';
-  rentalErrorMessage.value = '';
   rentalForm.hours = 1;
   rentalForm.firstName = '';
   rentalForm.lastName = '';
@@ -91,7 +87,6 @@ async function submitRental() {
     return;
   }
 
-  rentalErrorMessage.value = '';
   try {
     const payload = {
       carUuid: selectedCar.value.uuid,
@@ -105,9 +100,10 @@ async function submitRental() {
     }
 
     const response = await api.createRental(payload);
-    rentalSuccessMessage.value = response.message;
+    showSuccess(response.message);
+    closeRentalModal();
   } catch (error) {
-    rentalErrorMessage.value = error.message;
+    showError(error.message);
   }
 }
 
@@ -124,8 +120,6 @@ loadCars();
     </div>
 
     <p v-if="loading">{{ t('common.loading') }}</p>
-    <p v-else-if="errorMessage" class="text-error">{{ errorMessage }}</p>
-
     <div v-else class="cars-grid">
       <CarCard v-for="car in cars" :key="car.uuid" :car="car" @rent="openRentalModal" />
     </div>
@@ -147,8 +141,6 @@ loadCars();
           ({{ t('cars.loyaltyMultiplier') }}: {{ priceInfo.multiplier }})
         </p>
 
-        <p v-if="rentalSuccessMessage" class="text-success">{{ rentalSuccessMessage }}</p>
-        <p v-if="rentalErrorMessage" class="text-error">{{ rentalErrorMessage }}</p>
 
         <div class="form-actions">
           <button type="button" class="btn btn--ghost" @click="closeRentalModal">{{ t('common.actions.close') }}</button>

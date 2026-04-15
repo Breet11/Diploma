@@ -1,15 +1,15 @@
 <script setup>
-import { reactive, ref } from 'vue';
+import { reactive } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import TextFieldBuilder from '../components/form/TextFieldBuilder.vue';
 import { api } from '../api';
+import { useToast } from '../composables/useToast';
 import { encryptAuthPassword } from '../utils/crypto';
 
 const router = useRouter();
 const { t } = useI18n();
-const errorMessage = ref('');
-const successMessage = ref('');
+const { success: showSuccess, error: showError } = useToast();
 
 const form = reactive({
   email: '',
@@ -18,18 +18,15 @@ const form = reactive({
 });
 
 async function submit() {
-  errorMessage.value = '';
-  successMessage.value = '';
-
   try {
     const response = await api.register({
       ...form,
       password: await encryptAuthPassword(form.password)
     });
-    successMessage.value = response?.message || response || t('auth.register.successFallback');
+    showSuccess(response?.message || response || t('auth.register.successFallback'));
     router.push({ name: 'login' });
   } catch (error) {
-    errorMessage.value = error.message;
+    showError(error.message);
   }
 }
 </script>
@@ -41,8 +38,6 @@ async function submit() {
       <TextFieldBuilder id="email" v-model="form.email" :label="t('common.labels.email')" type="email" />
       <TextFieldBuilder id="login" v-model="form.login" :label="t('common.labels.login')" />
       <TextFieldBuilder id="password" v-model="form.password" :label="t('common.labels.password')" type="password" />
-      <p v-if="errorMessage" class="text-error">{{ errorMessage }}</p>
-      <p v-if="successMessage" class="text-success">{{ successMessage }}</p>
       <div class="form-actions">
         <button type="button" class="btn btn--ghost" @click="router.push({ name: 'login' })">{{ t('auth.register.backToLogin') }}</button>
         <button type="submit" class="btn">{{ t('auth.register.submit') }}</button>
