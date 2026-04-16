@@ -30,29 +30,10 @@ const imageSrc = computed(() => {
     <v-img :src="imageSrc" :alt="`${props.car.brand} ${props.car.model}`" class="car-card__image" cover />
 
     <v-card-title>
-      <div class="car-card__title-wrap">
-        <h3 class="car-card__title">{{ props.car.brand }} {{ props.car.model }}</h3>
-        <v-chip :color="props.car.available ? 'success' : 'warning'" size="small" variant="tonal">
-          {{ props.car.available ? t('common.status.available') : t('common.status.unavailable') }}
-        </v-chip>
-      </div>
+      <h3 class="car-card__title">{{ props.car.brand }} {{ props.car.model }}</h3>
     </v-card-title>
 
     <v-card-text>
-      <v-list density="compact" bg-color="transparent" class="car-card__meta">
-        <v-list-item>
-          <template #title><strong>{{ t('carCard.year') }}:</strong> {{ props.car.releaseYear }}</template>
-        </v-list-item>
-        <v-list-item>
-          <template #title><strong>{{ t('carCard.topSpeed') }}:</strong> {{ props.car.topSpeed }} {{ t('carCard.kmPerHour') }}</template>
-        </v-list-item>
-        <v-list-item>
-          <template #title><strong>{{ t('carCard.acceleration') }}:</strong> {{ props.car.acceleration }}</template>
-        </v-list-item>
-        <v-list-item>
-          <template #title><strong>{{ t('carCard.engine') }}:</strong> {{ props.car.engineType }}</template>
-        </v-list-item>
-      </v-list>
 
       <p class="car-card__price">{{ formattedPrice }} {{ t('carCard.pricePerHour') }}</p>
     </v-card-text>

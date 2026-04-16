@@ -1,0 +1,91 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="20260416-1-seed-car-catalog" author="copilot">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM dip_car</sqlCheck>
+        </preConditions>
+        <sql splitStatements="true" stripComments="true"><![CDATA[
+            INSERT INTO dip_engine_type (uuid, engine_type) VALUES
+                ('91000000-0000-0000-0000-000000000001', 'Petrol'),
+                ('91000000-0000-0000-0000-000000000002', 'Hybrid'),
+                ('91000000-0000-0000-0000-000000000003', 'Diesel'),
+                ('91000000-0000-0000-0000-000000000004', 'Electric');
+
+            INSERT INTO dip_car_brand (uuid, name) VALUES
+                ('92000000-0000-0000-0000-000000000001', 'Toyota'),
+                ('92000000-0000-0000-0000-000000000002', 'BMW'),
+                ('92000000-0000-0000-0000-000000000003', 'Mercedes-Benz'),
+                ('92000000-0000-0000-0000-000000000004', 'Audi'),
+                ('92000000-0000-0000-0000-000000000005', 'Tesla'),
+                ('92000000-0000-0000-0000-000000000006', 'Porsche'),
+                ('92000000-0000-0000-0000-000000000007', 'Lexus'),
+                ('92000000-0000-0000-0000-000000000008', 'Land Rover'),
+                ('92000000-0000-0000-0000-000000000009', 'Volkswagen'),
+                ('92000000-0000-0000-0000-000000000010', 'Volvo');
+
+            INSERT INTO dip_car_model (uuid, name) VALUES
+                ('93000000-0000-0000-0000-000000000001', 'Camry'),
+                ('93000000-0000-0000-0000-000000000002', '5 Series'),
+                ('93000000-0000-0000-0000-000000000003', 'E-Class'),
+                ('93000000-0000-0000-0000-000000000004', 'A6'),
+                ('93000000-0000-0000-0000-000000000005', 'Model 3'),
+                ('93000000-0000-0000-0000-000000000006', 'Macan'),
+                ('93000000-0000-0000-0000-000000000007', 'RX 350h'),
+                ('93000000-0000-0000-0000-000000000008', 'Range Rover Evoque'),
+                ('93000000-0000-0000-0000-000000000009', 'Passat'),
+                ('93000000-0000-0000-0000-000000000010', 'XC60');
+
+            INSERT INTO dip_engine_specs (uuid, engine_type_uuid, fuel_consumption, horsepower, torque, engine_volume) VALUES
+                ('94000000-0000-0000-0000-000000000001', '91000000-0000-0000-0000-000000000001', '7.1 L/100 km', 249, 365, 2.50),
+                ('94000000-0000-0000-0000-000000000002', '91000000-0000-0000-0000-000000000001', '6.8 L/100 km', 252, 350, 2.00),
+                ('94000000-0000-0000-0000-000000000003', '91000000-0000-0000-0000-000000000003', '5.9 L/100 km', 265, 550, 2.00),
+                ('94000000-0000-0000-0000-000000000004', '91000000-0000-0000-0000-000000000001', '7.4 L/100 km', 245, 370, 2.00),
+                ('94000000-0000-0000-0000-000000000005', '91000000-0000-0000-0000-000000000004', '0 kWh/km', 283, 420, 0.00),
+                ('94000000-0000-0000-0000-000000000006', '91000000-0000-0000-0000-000000000001', '8.8 L/100 km', 265, 400, 2.00),
+                ('94000000-0000-0000-0000-000000000007', '91000000-0000-0000-0000-000000000002', '6.0 L/100 km', 250, 315, 2.50),
+                ('94000000-0000-0000-0000-000000000008', '91000000-0000-0000-0000-000000000003', '6.7 L/100 km', 204, 430, 2.00),
+                ('94000000-0000-0000-0000-000000000009', '91000000-0000-0000-0000-000000000001', '6.5 L/100 km', 220, 350, 2.00),
+                ('94000000-0000-0000-0000-000000000010', '91000000-0000-0000-0000-000000000002', '6.9 L/100 km', 250, 350, 2.00);
+
+            INSERT INTO dip_engine (uuid, engine_specs_uuid, engine_name) VALUES
+                ('95000000-0000-0000-0000-000000000001', '94000000-0000-0000-0000-000000000001', 'Dynamic Force 2.5'),
+                ('95000000-0000-0000-0000-000000000002', '94000000-0000-0000-0000-000000000002', 'TwinPower Turbo 2.0'),
+                ('95000000-0000-0000-0000-000000000003', '94000000-0000-0000-0000-000000000003', 'OM654 2.0 Diesel'),
+                ('95000000-0000-0000-0000-000000000004', '94000000-0000-0000-0000-000000000004', 'TFSI 2.0'),
+                ('95000000-0000-0000-0000-000000000005', '94000000-0000-0000-0000-000000000005', 'Tesla Dual Motor'),
+                ('95000000-0000-0000-0000-000000000006', '94000000-0000-0000-0000-000000000006', 'Porsche 2.0 Turbo'),
+                ('95000000-0000-0000-0000-000000000007', '94000000-0000-0000-0000-000000000007', 'Lexus Hybrid 2.5'),
+                ('95000000-0000-0000-0000-000000000008', '94000000-0000-0000-0000-000000000008', 'Ingenium Diesel 2.0'),
+                ('95000000-0000-0000-0000-000000000009', '94000000-0000-0000-0000-000000000009', 'TSI 2.0'),
+                ('95000000-0000-0000-0000-000000000010', '94000000-0000-0000-0000-000000000010', 'B5 Mild Hybrid 2.0');
+
+            INSERT INTO dip_car_specs (uuid, acceleration, top_speed, release_year, car_brand_uuid, car_model_uuid) VALUES
+                ('96000000-0000-0000-0000-000000000001', '7.9 s', 210, 2023, '92000000-0000-0000-0000-000000000001', '93000000-0000-0000-0000-000000000001'),
+                ('96000000-0000-0000-0000-000000000002', '6.2 s', 250, 2022, '92000000-0000-0000-0000-000000000002', '93000000-0000-0000-0000-000000000002'),
+                ('96000000-0000-0000-0000-000000000003', '6.4 s', 250, 2021, '92000000-0000-0000-0000-000000000003', '93000000-0000-0000-0000-000000000003'),
+                ('96000000-0000-0000-0000-000000000004', '6.8 s', 246, 2022, '92000000-0000-0000-0000-000000000004', '93000000-0000-0000-0000-000000000004'),
+                ('96000000-0000-0000-0000-000000000005', '6.1 s', 225, 2023, '92000000-0000-0000-0000-000000000005', '93000000-0000-0000-0000-000000000005'),
+                ('96000000-0000-0000-0000-000000000006', '6.4 s', 232, 2024, '92000000-0000-0000-0000-000000000006', '93000000-0000-0000-0000-000000000006'),
+                ('96000000-0000-0000-0000-000000000007', '7.9 s', 200, 2024, '92000000-0000-0000-0000-000000000007', '93000000-0000-0000-0000-000000000007'),
+                ('96000000-0000-0000-0000-000000000008', '8.5 s', 213, 2021, '92000000-0000-0000-0000-000000000008', '93000000-0000-0000-0000-000000000008'),
+                ('96000000-0000-0000-0000-000000000009', '7.5 s', 238, 2022, '92000000-0000-0000-0000-000000000009', '93000000-0000-0000-0000-000000000009'),
+                ('96000000-0000-0000-0000-000000000010', '6.9 s', 180, 2023, '92000000-0000-0000-0000-000000000010', '93000000-0000-0000-0000-000000000010');
+
+            INSERT INTO dip_car (uuid, engine_uuid, car_specs_uuid, price, available, image_url, image_blob, image_content_type) VALUES
+                ('97000000-0000-0000-0000-000000000001', '95000000-0000-0000-0000-000000000001', '96000000-0000-0000-0000-000000000001', 850, true, 'seed:toyota-camry', convert_to('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360"><rect width="640" height="360" rx="24" fill="#0f172a"/><rect x="24" y="24" width="592" height="312" rx="22" fill="#1d4ed8" opacity="0.88"/><circle cx="172" cy="278" r="34" fill="#111827"/><circle cx="472" cy="278" r="34" fill="#111827"/><path d="M148 236h86l44-52h106l80 52v30H148z" fill="#f8fafc" opacity="0.96"/><text x="52" y="82" fill="#ffffff" font-size="30" font-family="Arial, sans-serif" font-weight="700">Toyota Camry</text><text x="52" y="120" fill="#dbeafe" font-size="18" font-family="Arial, sans-serif">Comfort rental</text></svg>', 'UTF8'), 'image/svg+xml'),
+                ('97000000-0000-0000-0000-000000000002', '95000000-0000-0000-0000-000000000002', '96000000-0000-0000-0000-000000000002', 1250, true, 'seed:bmw-5-series', convert_to('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360"><rect width="640" height="360" rx="24" fill="#111827"/><rect x="24" y="24" width="592" height="312" rx="22" fill="#1e3a8a" opacity="0.9"/><circle cx="172" cy="278" r="34" fill="#0f172a"/><circle cx="472" cy="278" r="34" fill="#0f172a"/><path d="M144 238h90l40-50h108l86 50v30H144z" fill="#f9fafb" opacity="0.97"/><text x="52" y="82" fill="#ffffff" font-size="30" font-family="Arial, sans-serif" font-weight="700">BMW 5 Series</text><text x="52" y="120" fill="#bfdbfe" font-size="18" font-family="Arial, sans-serif">Business class</text></svg>', 'UTF8'), 'image/svg+xml'),
+                ('97000000-0000-0000-0000-000000000003', '95000000-0000-0000-0000-000000000003', '96000000-0000-0000-0000-000000000003', 1300, true, 'seed:mercedes-e-class', convert_to('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360"><rect width="640" height="360" rx="24" fill="#1f2937"/><rect x="24" y="24" width="592" height="312" rx="22" fill="#6b7280" opacity="0.92"/><circle cx="172" cy="278" r="34" fill="#111827"/><circle cx="472" cy="278" r="34" fill="#111827"/><path d="M148 236h82l44-50h110l82 50v30H148z" fill="#ffffff" opacity="0.97"/><text x="52" y="82" fill="#ffffff" font-size="30" font-family="Arial, sans-serif" font-weight="700">Mercedes E-Class</text><text x="52" y="120" fill="#e5e7eb" font-size="18" font-family="Arial, sans-serif">Executive sedan</text></svg>', 'UTF8'), 'image/svg+xml'),
+                ('97000000-0000-0000-0000-000000000004', '95000000-0000-0000-0000-000000000004', '96000000-0000-0000-0000-000000000004', 1180, true, 'seed:audi-a6', convert_to('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360"><rect width="640" height="360" rx="24" fill="#0f172a"/><rect x="24" y="24" width="592" height="312" rx="22" fill="#991b1b" opacity="0.88"/><circle cx="172" cy="278" r="34" fill="#111827"/><circle cx="472" cy="278" r="34" fill="#111827"/><path d="M144 238h88l42-52h112l82 52v28H144z" fill="#fff7ed" opacity="0.97"/><text x="52" y="82" fill="#ffffff" font-size="30" font-family="Arial, sans-serif" font-weight="700">Audi A6</text><text x="52" y="120" fill="#fecaca" font-size="18" font-family="Arial, sans-serif">Premium drive</text></svg>', 'UTF8'), 'image/svg+xml'),
+                ('97000000-0000-0000-0000-000000000005', '95000000-0000-0000-0000-000000000005', '96000000-0000-0000-0000-000000000005', 1100, true, 'seed:tesla-model-3', convert_to('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360"><rect width="640" height="360" rx="24" fill="#111827"/><rect x="24" y="24" width="592" height="312" rx="22" fill="#dc2626" opacity="0.9"/><circle cx="172" cy="278" r="34" fill="#0f172a"/><circle cx="472" cy="278" r="34" fill="#0f172a"/><path d="M148 236h84l42-54h104l88 54v28H148z" fill="#ffffff" opacity="0.98"/><text x="52" y="82" fill="#ffffff" font-size="30" font-family="Arial, sans-serif" font-weight="700">Tesla Model 3</text><text x="52" y="120" fill="#fee2e2" font-size="18" font-family="Arial, sans-serif">Electric city ride</text></svg>', 'UTF8'), 'image/svg+xml'),
+                ('97000000-0000-0000-0000-000000000006', '95000000-0000-0000-0000-000000000006', '96000000-0000-0000-0000-000000000006', 1650, true, 'seed:porsche-macan', convert_to('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360"><rect width="640" height="360" rx="24" fill="#111827"/><rect x="24" y="24" width="592" height="312" rx="22" fill="#92400e" opacity="0.92"/><circle cx="172" cy="278" r="34" fill="#0f172a"/><circle cx="472" cy="278" r="34" fill="#0f172a"/><path d="M142 240h96l38-50h112l80 50v28H142z" fill="#fffaf0" opacity="0.98"/><text x="52" y="82" fill="#ffffff" font-size="30" font-family="Arial, sans-serif" font-weight="700">Porsche Macan</text><text x="52" y="120" fill="#fde68a" font-size="18" font-family="Arial, sans-serif">Sport SUV</text></svg>', 'UTF8'), 'image/svg+xml'),
+                ('97000000-0000-0000-0000-000000000007', '95000000-0000-0000-0000-000000000007', '96000000-0000-0000-0000-000000000007', 980, true, 'seed:lexus-rx', convert_to('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360"><rect width="640" height="360" rx="24" fill="#0f172a"/><rect x="24" y="24" width="592" height="312" rx="22" fill="#047857" opacity="0.9"/><circle cx="172" cy="278" r="34" fill="#111827"/><circle cx="472" cy="278" r="34" fill="#111827"/><path d="M144 238h90l42-50h108l84 50v30H144z" fill="#f8fafc" opacity="0.97"/><text x="52" y="82" fill="#ffffff" font-size="30" font-family="Arial, sans-serif" font-weight="700">Lexus RX 350h</text><text x="52" y="120" fill="#d1fae5" font-size="18" font-family="Arial, sans-serif">Hybrid comfort</text></svg>', 'UTF8'), 'image/svg+xml'),
+                ('97000000-0000-0000-0000-000000000008', '95000000-0000-0000-0000-000000000008', '96000000-0000-0000-0000-000000000008', 1450, true, 'seed:evoque', convert_to('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360"><rect width="640" height="360" rx="24" fill="#111827"/><rect x="24" y="24" width="592" height="312" rx="22" fill="#065f46" opacity="0.9"/><circle cx="172" cy="278" r="34" fill="#0f172a"/><circle cx="472" cy="278" r="34" fill="#0f172a"/><path d="M142 240h94l42-52h110l80 52v28H142z" fill="#f9fafb" opacity="0.97"/><text x="52" y="82" fill="#ffffff" font-size="30" font-family="Arial, sans-serif" font-weight="700">Range Rover Evoque</text><text x="52" y="120" fill="#d1fae5" font-size="18" font-family="Arial, sans-serif">Urban SUV</text></svg>', 'UTF8'), 'image/svg+xml'),
+                ('97000000-0000-0000-0000-000000000009', '95000000-0000-0000-0000-000000000009', '96000000-0000-0000-0000-000000000009', 920, true, 'seed:passat', convert_to('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360"><rect width="640" height="360" rx="24" fill="#1e293b"/><rect x="24" y="24" width="592" height="312" rx="22" fill="#2563eb" opacity="0.88"/><circle cx="172" cy="278" r="34" fill="#0f172a"/><circle cx="472" cy="278" r="34" fill="#0f172a"/><path d="M146 238h88l42-50h108l84 50v30H146z" fill="#ffffff" opacity="0.97"/><text x="52" y="82" fill="#ffffff" font-size="30" font-family="Arial, sans-serif" font-weight="700">Volkswagen Passat</text><text x="52" y="120" fill="#dbeafe" font-size="18" font-family="Arial, sans-serif">Practical comfort</text></svg>', 'UTF8'), 'image/svg+xml'),
+                ('97000000-0000-0000-0000-000000000010', '95000000-0000-0000-0000-000000000010', '96000000-0000-0000-0000-000000000010', 1190, true, 'seed:xc60', convert_to('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360"><rect width="640" height="360" rx="24" fill="#0f172a"/><rect x="24" y="24" width="592" height="312" rx="22" fill="#0f766e" opacity="0.9"/><circle cx="172" cy="278" r="34" fill="#111827"/><circle cx="472" cy="278" r="34" fill="#111827"/><path d="M144 238h92l40-52h110l82 52v28H144z" fill="#f8fafc" opacity="0.97"/><text x="52" y="82" fill="#ffffff" font-size="30" font-family="Arial, sans-serif" font-weight="700">Volvo XC60</text><text x="52" y="120" fill="#ccfbf1" font-size="18" font-family="Arial, sans-serif">Scandinavian style</text></svg>', 'UTF8'), 'image/svg+xml');
+        ]]></sql>
+    </changeSet>
+</databaseChangeLog>
+
