@@ -8,6 +8,7 @@ import { api } from '../api';
 import { useToast } from '../composables/useToast';
 import { LOCALE_TAGS } from '../i18n';
 import { isAuthenticated } from '../utils/auth';
+import { formatUsd } from '../utils/currency';
 
 const { t, locale } = useI18n();
 const { success: showSuccess, error: showError } = useToast();
@@ -137,7 +138,7 @@ loadCars();
         </template>
 
         <p v-if="priceInfo" class="price-preview">
-          {{ t('cars.price') }}: <strong>{{ Number(priceInfo.totalPrice).toLocaleString(localeTag) }} ₽</strong>
+          {{ t('cars.price') }}: <strong>{{ formatUsd(priceInfo.totalPrice, localeTag) }}</strong>
           ({{ t('cars.loyaltyMultiplier') }}: {{ priceInfo.multiplier }})
         </p>
 

@@ -28,6 +28,9 @@ public class CreateUserServiceCustom implements CreateUserService {
                 null,
                 createUserRequestDto.email(),
                 createUserRequestDto.login(),
+                createUserRequestDto.firstName(),
+                createUserRequestDto.lastName(),
+                createUserRequestDto.phone(),
                 passwordEncoder.encode(createUserRequestDto.password()),
                 role
         );

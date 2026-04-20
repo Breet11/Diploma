@@ -7,6 +7,9 @@ import jakarta.validation.constraints.NotBlank;
 public record CreateUserRequestDto(
         @Email @NotBlank String email,
         @NotBlank String login,
+        @NotBlank String firstName,
+        @NotBlank String lastName,
+        @NotBlank String phone,
         @NotBlank String password,
         Role role
 ) {

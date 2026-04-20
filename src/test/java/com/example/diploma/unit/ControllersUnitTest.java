@@ -102,7 +102,15 @@ class BasicControllersUnitTest {
 
     @Test
     void authControllerShouldReturnCreatedOnRegister() {
-        RegisterRequestDto request = new RegisterRequestDto("john@example.com", "john", "encrypted");
+        RegisterRequestDto request = new RegisterRequestDto(
+                "john@example.com",
+                "john",
+                "John",
+                "Doe",
+                "+10000000001",
+                "encrypted",
+                "encrypted-confirm"
+        );
         AuthMessageResponseDto response = new AuthMessageResponseDto("ok");
         when(authService.register(request)).thenReturn(response);
 
@@ -114,7 +122,7 @@ class BasicControllersUnitTest {
 
     @Test
     void profileControllerShouldReturnCurrentProfile() {
-        ProfileResponseDto response = new ProfileResponseDto("user@example.com", "user", "USER");
+        ProfileResponseDto response = new ProfileResponseDto("user@example.com", "user", "John", "Doe", "+10000000001", "USER");
         when(getProfileService.getProfile("user")).thenReturn(response);
 
         var entity = profileController.me(new UsernamePasswordAuthenticationToken("user", null));

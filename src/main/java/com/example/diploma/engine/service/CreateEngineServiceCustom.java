@@ -32,6 +32,35 @@ public class CreateEngineServiceCustom implements CreateEngineService {
 
         return engineRepository.save(engine);
     }
+
+    @Override
+    public Engine updateEngine(java.util.UUID uuid, CreateEngineRequest createEngineRequest) {
+        Engine engine = engineRepository.findById(uuid)
+                .orElseThrow(() -> new IllegalArgumentException("Engine with id " + uuid + " not found"));
+        var engineType = engineTypeRepository.findById(createEngineRequest.engineTypeUuid())
+                .orElseThrow(() -> new IllegalArgumentException("Engine type with id " + createEngineRequest.engineTypeUuid() + " not found"));
+
+        EngineSpecs engineSpecs = engine.getEngineSpecs();
+        if (engineSpecs == null) {
+            engineSpecs = new EngineSpecs();
+            engine.setEngineSpecs(engineSpecs);
+        }
+        engineSpecs.setEngineType(engineType);
+        engineSpecs.setFuelConsumption(createEngineRequest.fuelConsumption());
+        engineSpecs.setHorsepower(createEngineRequest.horsepower());
+        engineSpecs.setTorque(createEngineRequest.torque());
+        engineSpecs.setEngineVolume(createEngineRequest.engineVolume());
+        engine.setEngineName(createEngineRequest.engineName());
+
+        return engineRepository.save(engine);
+    }
+
+    @Override
+    public void deleteEngine(java.util.UUID uuid) {
+        Engine engine = engineRepository.findById(uuid)
+                .orElseThrow(() -> new IllegalArgumentException("Engine with id " + uuid + " not found"));
+        engineRepository.delete(engine);
+    }
 }
 
 

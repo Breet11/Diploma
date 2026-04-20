@@ -2,6 +2,7 @@
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { LOCALE_TAGS } from '../../i18n';
+import { formatUsd } from '../../utils/currency';
 
 const props = defineProps({
   car: {
@@ -13,7 +14,7 @@ const props = defineProps({
 const emit = defineEmits(['rent']);
 const { t, locale } = useI18n();
 const localeTag = computed(() => LOCALE_TAGS[locale.value] || LOCALE_TAGS.en);
-const formattedPrice = computed(() => Number(props.car.hourlyRentalPrice).toLocaleString(localeTag.value));
+const formattedPrice = computed(() => formatUsd(props.car.hourlyRentalPrice, localeTag.value));
 
 const imageSrc = computed(() => {
   if (props.car.imageBase64) {
@@ -39,9 +40,34 @@ const imageSrc = computed(() => {
     </v-card-text>
 
     <v-card-actions>
-      <v-btn block color="primary" :disabled="!props.car.available" @click="emit('rent', props.car)">
+      <v-btn
+        block
+        variant="flat"
+        class="car-card__rent-btn"
+        :disabled="!props.car.available"
+        @click="emit('rent', props.car)"
+      >
         {{ t('carCard.rent') }}
       </v-btn>
     </v-card-actions>
   </v-card>
 </template>
+
+<style scoped>
+.car-card__rent-btn {
+  background-color: #111827 !important;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.car-card__rent-btn:hover,
+.car-card__rent-btn:focus,
+.car-card__rent-btn:active {
+  background-color: #111827 !important;
+}
+
+:deep(.car-card__rent-btn .v-btn__overlay) {
+  opacity: 0;
+}
+</style>
+

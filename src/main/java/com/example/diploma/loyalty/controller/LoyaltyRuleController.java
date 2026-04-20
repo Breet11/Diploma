@@ -7,8 +7,12 @@ import com.example.diploma.utils.HTTP.HttpSpecs;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,6 +46,28 @@ public class LoyaltyRuleController {
     @PostMapping(HttpSpecs.LoyaltyRule.CREATE)
     public ResponseEntity<UUID> createLoyaltyRule(@Valid @RequestBody CreateLoyaltyRuleRequest createLoyaltyRuleRequest) {
         return ResponseEntity.ok(createLoyaltyRuleService.createLoyaltyRule(createLoyaltyRuleRequest).getUuid());
+    }
+
+    @PutMapping("/{uuid}")
+    public ResponseEntity<UUID> updateLoyaltyRule(
+            @PathVariable UUID uuid,
+            @Valid @RequestBody CreateLoyaltyRuleRequest createLoyaltyRuleRequest
+    ) {
+        return ResponseEntity.ok(createLoyaltyRuleService.updateLoyaltyRule(uuid, createLoyaltyRuleRequest).getUuid());
+    }
+
+    @PatchMapping("/{uuid}")
+    public ResponseEntity<UUID> patchLoyaltyRule(
+            @PathVariable UUID uuid,
+            @Valid @RequestBody CreateLoyaltyRuleRequest createLoyaltyRuleRequest
+    ) {
+        return ResponseEntity.ok(createLoyaltyRuleService.updateLoyaltyRule(uuid, createLoyaltyRuleRequest).getUuid());
+    }
+
+    @DeleteMapping("/{uuid}")
+    public ResponseEntity<Void> deleteLoyaltyRule(@PathVariable UUID uuid) {
+        createLoyaltyRuleService.deleteLoyaltyRule(uuid);
+        return ResponseEntity.noContent().build();
     }
 
     public record LoyaltyRuleListItem(

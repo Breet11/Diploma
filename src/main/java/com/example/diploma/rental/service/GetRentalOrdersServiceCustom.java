@@ -23,7 +23,7 @@ public class GetRentalOrdersServiceCustom implements GetRentalOrdersService {
                             ? String.format("%s (%s)", order.getUser().getLogin(), order.getUser().getEmail())
                             : String.format("%s %s", order.getFirstName(), order.getLastName());
 
-                    String phone = order.getUser() != null ? "-" : order.getPhone();
+                    String phone = order.getPhone() == null || order.getPhone().isBlank() ? "-" : order.getPhone();
                     String car = String.format(
                             "%s %s",
                             order.getCar().getCarSpecs().getCarBrand().getName(),

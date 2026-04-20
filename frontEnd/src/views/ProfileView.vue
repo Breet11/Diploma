@@ -23,6 +23,9 @@ onMounted(async () => {
     <div v-if="profile" class="profile-card">
       <p><strong>{{ t('profile.login') }}:</strong> {{ profile.login }}</p>
       <p><strong>{{ t('profile.email') }}:</strong> {{ profile.email }}</p>
+      <p><strong>{{ t('common.labels.firstName') }}:</strong> {{ profile.firstName }}</p>
+      <p><strong>{{ t('common.labels.lastName') }}:</strong> {{ profile.lastName }}</p>
+      <p><strong>{{ t('common.labels.phone') }}:</strong> {{ profile.phone }}</p>
       <p><strong>{{ t('profile.role') }}:</strong> {{ t(`common.roles.${profile.role}`) }}</p>
     </div>
   </section>

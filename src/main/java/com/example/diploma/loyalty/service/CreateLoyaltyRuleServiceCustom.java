@@ -25,5 +25,28 @@ public class CreateLoyaltyRuleServiceCustom implements CreateLoyaltyRuleService 
 
         return loyaltyRuleRepository.save(loyaltyRule);
     }
+
+    @Override
+    public LoyaltyRule updateLoyaltyRule(java.util.UUID uuid, CreateLoyaltyRuleRequest createLoyaltyRuleRequest) {
+        if (createLoyaltyRuleRequest.maxHours() != null && createLoyaltyRuleRequest.maxHours() < createLoyaltyRuleRequest.minHours()) {
+            throw new IllegalArgumentException("maxHours must be greater than or equal to minHours");
+        }
+
+        LoyaltyRule loyaltyRule = loyaltyRuleRepository.findById(uuid)
+                .orElseThrow(() -> new IllegalArgumentException("Loyalty rule with id " + uuid + " not found"));
+        loyaltyRule.setMinHours(createLoyaltyRuleRequest.minHours());
+        loyaltyRule.setMaxHours(createLoyaltyRuleRequest.maxHours());
+        loyaltyRule.setMultiplier(createLoyaltyRuleRequest.multiplier());
+        loyaltyRule.setActive(createLoyaltyRuleRequest.active());
+
+        return loyaltyRuleRepository.save(loyaltyRule);
+    }
+
+    @Override
+    public void deleteLoyaltyRule(java.util.UUID uuid) {
+        LoyaltyRule loyaltyRule = loyaltyRuleRepository.findById(uuid)
+                .orElseThrow(() -> new IllegalArgumentException("Loyalty rule with id " + uuid + " not found"));
+        loyaltyRuleRepository.delete(loyaltyRule);
+    }
 }
 

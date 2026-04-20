@@ -1,0 +1,31 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="20260420-1-add-user-contact-fields" author="copilot">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="dip_user"/>
+            <not>
+                <columnExists tableName="dip_user" columnName="first_name"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="dip_user">
+            <column name="first_name" type="VARCHAR(255)"/>
+            <column name="last_name" type="VARCHAR(255)"/>
+            <column name="phone" type="VARCHAR(64)"/>
+        </addColumn>
+
+        <sql splitStatements="true" stripComments="true"><![CDATA[
+            UPDATE dip_user SET first_name = INITCAP(login) WHERE first_name IS NULL OR TRIM(first_name) = '';
+            UPDATE dip_user SET last_name = 'User' WHERE last_name IS NULL OR TRIM(last_name) = '';
+            UPDATE dip_user SET phone = '+10000000000' WHERE phone IS NULL OR TRIM(phone) = '';
+        ]]></sql>
+
+        <addNotNullConstraint tableName="dip_user" columnName="first_name" columnDataType="VARCHAR(255)"/>
+        <addNotNullConstraint tableName="dip_user" columnName="last_name" columnDataType="VARCHAR(255)"/>
+        <addNotNullConstraint tableName="dip_user" columnName="phone" columnDataType="VARCHAR(64)"/>
+    </changeSet>
+</databaseChangeLog>
+

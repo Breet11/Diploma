@@ -9,4 +9,5 @@
     <include file="20260402-admin-and-engine-image-updates.xml" relativeToChangelogFile="true"/>
     <include file="20260406-seed-test-users.xml" relativeToChangelogFile="true"/>
     <include file="20260416-seed-car-catalog.xml" relativeToChangelogFile="true"/>
+    <include file="20260420-add-user-contact-fields.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

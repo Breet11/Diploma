@@ -14,7 +14,9 @@ export default {
     actions: {
       close: 'Закрыть',
       create: 'Создать',
+      save: 'Сохранить',
       edit: 'Редактировать',
+      delete: 'Удалить',
       understood: 'Понятно',
       submitRequest: 'Отправить заявку',
       backToLogin: 'Назад ко входу',
@@ -36,6 +38,7 @@ export default {
       login: 'Логин',
       email: 'Email',
       password: 'Пароль',
+      confirmPassword: 'Подтверждение пароля',
       role: 'Роль',
       firstName: 'Имя',
       lastName: 'Фамилия',
@@ -82,7 +85,7 @@ export default {
     acceleration: 'Разгон',
     engine: 'Двигатель',
     rent: 'Арендовать',
-    pricePerHour: '₽ / час',
+    pricePerHour: '/ час',
     kmPerHour: 'км/ч',
     liters: 'л'
   },
@@ -99,6 +102,9 @@ export default {
     sidebarTitle: 'Справочники',
     empty: 'Нет данных',
     createSuccess: 'Запись успешно создана',
+    updateSuccess: 'Запись успешно обновлена',
+    deleteSuccess: 'Запись успешно удалена',
+    confirmDelete: 'Удалить эту запись?',
     editDialogTitle: 'Редактирование',
     editNotImplemented: 'Редактирование UI уже готово. Для сохранения нужно добавить backend PUT/PATCH endpoints.',
     entities: {
@@ -222,7 +228,8 @@ export default {
   errors: {
     browserCryptoUnsupported: 'Ваш браузер не поддерживает Web Crypto API',
     publicKeyMissing: 'Заполни PUBLIC_KEY_PEM реальным RSA public key в формате PEM',
-    requestFailed: 'Ошибка запроса: {status}'
+    requestFailed: 'Ошибка запроса: {status}',
+    passwordsDoNotMatch: 'Пароль и подтверждение пароля не совпадают'
   }
 };
 

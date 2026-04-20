@@ -12,7 +12,7 @@ const { toasts, removeToast } = useToast();
 		  v-for="toast in toasts"
 		  :key="toast.id"
 		  :type="toast.type"
-		  variant="tonal"
+		  variant="flat"
 		  closable
 		  border="start"
 		  class="toast-host__item"
@@ -51,4 +51,3 @@ const { toasts, removeToast } = useToast();
   transform: translateY(-8px);
 }
 </style>
-

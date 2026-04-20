@@ -7,6 +7,7 @@ import SelectFieldBuilder from '../components/form/SelectFieldBuilder.vue';
 import { api } from '../api';
 import { useToast } from '../composables/useToast';
 import { LOCALE_TAGS } from '../i18n';
+import { formatUsd } from '../utils/currency';
 
 const { t, locale } = useI18n();
 const { success: showSuccess, error: showError } = useToast();
@@ -19,6 +20,8 @@ const entities = [
     columns: [{ key: 'name' }],
     list: () => api.getCarBrands(),
     create: (payload) => api.createCarBrand(payload),
+    update: (uuid, payload) => api.updateCarBrand(uuid, payload),
+    remove: (uuid) => api.deleteCarBrand(uuid),
     fields: [{ key: 'name' }]
   },
   {
@@ -27,6 +30,8 @@ const entities = [
     columns: [{ key: 'name' }],
     list: () => api.getCarModels(),
     create: (payload) => api.createCarModel(payload),
+    update: (uuid, payload) => api.updateCarModel(uuid, payload),
+    remove: (uuid) => api.deleteCarModel(uuid),
     fields: [{ key: 'name' }]
   },
   {
@@ -35,6 +40,8 @@ const entities = [
     columns: [{ key: 'engineType' }],
     list: () => api.getEngineTypes(),
     create: (payload) => api.createEngineType(payload),
+    update: (uuid, payload) => api.updateEngineType(uuid, payload),
+    remove: (uuid) => api.deleteEngineType(uuid),
     fields: [{ key: 'engineType' }]
   },
   {
@@ -50,6 +57,8 @@ const entities = [
     ],
     list: () => api.getEngines(),
     create: (payload) => api.createEngine(payload),
+    update: (uuid, payload) => api.updateEngine(uuid, payload),
+    remove: (uuid) => api.deleteEngine(uuid),
     fields: [
       { key: 'engineName' },
       {
@@ -84,6 +93,8 @@ const entities = [
     ],
     list: () => api.getCarSpecs(),
     create: (payload) => api.createCarSpecs(payload),
+    update: (uuid, payload) => api.updateCarSpecs(uuid, payload),
+    remove: (uuid) => api.deleteCarSpecs(uuid),
     fields: [
       {
         key: 'carBrandUuid',
@@ -118,11 +129,13 @@ const entities = [
       { key: 'brand' },
       { key: 'model' },
       { key: 'releaseYear' },
-      { key: 'hourlyRentalPrice' },
+      { key: 'hourlyRentalPrice', format: (value) => formatUsd(value, localeTag.value) },
       { key: 'available', format: (value) => (value ? t('common.status.available') : t('common.status.unavailable')) }
     ],
     list: () => api.getCars(),
     create: (payload, imageFile) => api.createCar(payload, imageFile),
+    update: (uuid, payload, imageFile) => api.updateCar(uuid, payload, imageFile),
+    remove: (uuid) => api.deleteCar(uuid),
     fields: [
       {
         key: 'engineUuid',
@@ -140,7 +153,7 @@ const entities = [
           label: (item) => `${item.brand} ${item.model}, ${item.releaseYear}`
         }
       },
-      { key: 'price', type: 'number' },
+      { key: 'price', type: 'number', fromRow: (row) => row.hourlyRentalPrice },
       { key: 'available', type: 'checkbox' }
     ],
     hasFile: true,
@@ -161,6 +174,8 @@ const entities = [
     ],
     list: () => api.getLoyaltyRules(),
     create: (payload) => api.createLoyaltyRule(payload),
+    update: (uuid, payload) => api.updateLoyaltyRule(uuid, payload),
+    remove: (uuid) => api.deleteLoyaltyRule(uuid),
     fields: [
       { key: 'minHours', type: 'number' },
       { key: 'maxHours', type: 'number' },
@@ -191,7 +206,7 @@ const entities = [
       { key: 'phone' },
       { key: 'car' },
       { key: 'hours' },
-      { key: 'totalPrice' },
+      { key: 'totalPrice', format: (value) => formatUsd(value, localeTag.value) },
       { key: 'status' },
       { key: 'createdAt', format: (value) => new Date(value).toLocaleString(localeTag.value) }
     ],
@@ -305,10 +320,33 @@ async function openCreate() {
   });
 }
 
-function openEdit(row) {
+async function openEdit(row) {
+  if (activeEntity.value.readOnly || !activeEntity.value.update) {
+    return;
+  }
+
   currentAction.value = { mode: 'edit', entity: activeEntity.value, row };
   errorMessage.value = '';
   successMessage.value = '';
+
+  resetForm();
+  try {
+    await loadReferenceOptions(activeEntity.value);
+  } catch (error) {
+    errorMessage.value = error.message;
+    showError(error.message);
+  }
+
+  activeEntity.value.fields?.forEach((field) => {
+    if (field.type === 'checkbox') {
+      form[field.key] = Boolean(row[field.key]);
+      return;
+    }
+    form[field.key] = field.fromRow ? field.fromRow(row) : (row[field.key] ?? '');
+  });
+  activeEntity.value.selects?.forEach((select) => {
+    form[select.key] = row[select.key] ?? '';
+  });
 }
 
 function close() {
@@ -336,7 +374,7 @@ async function loadRows() {
 }
 
 async function submit() {
-  if (!currentAction.value || currentAction.value.mode !== 'create') {
+  if (!currentAction.value) {
     return;
   }
 
@@ -349,13 +387,32 @@ async function submit() {
       payload = currentAction.value.entity.normalize(payload);
     }
 
-    await currentAction.value.entity.create(payload, imageFile.value);
-    successMessage.value = t('admin.createSuccess');
+    if (currentAction.value.mode === 'create') {
+      await currentAction.value.entity.create(payload, imageFile.value);
+      successMessage.value = t('admin.createSuccess');
+    } else {
+      await currentAction.value.entity.update(currentAction.value.row.uuid, payload, imageFile.value);
+      successMessage.value = t('admin.updateSuccess');
+    }
     showSuccess(successMessage.value);
     await loadRows();
     close();
   } catch (error) {
     errorMessage.value = error.message;
+    showError(error.message);
+  }
+}
+
+async function removeRow(row) {
+  if (!activeEntity.value.remove || !confirm(t('admin.confirmDelete'))) {
+    return;
+  }
+
+  try {
+    await activeEntity.value.remove(row.uuid);
+    showSuccess(t('admin.deleteSuccess'));
+    await loadRows();
+  } catch (error) {
     showError(error.message);
   }
 }
@@ -419,6 +476,9 @@ onMounted(loadRows);
                 <button type="button" class="btn btn--ghost admin-icon-btn" :title="t('common.actions.edit')" @click="openEdit(row)">
                   <i class="mdi mdi-file-document-edit-outline"></i>
                 </button>
+                <button type="button" class="btn btn--ghost admin-icon-btn" :title="t('common.actions.delete')" @click="removeRow(row)">
+                  <i class="mdi mdi-delete-outline"></i>
+                </button>
               </td>
             </tr>
           </tbody>
@@ -431,14 +491,7 @@ onMounted(loadRows);
       :title="currentAction?.mode === 'edit' ? t('admin.editDialogTitle') : (currentAction?.entity ? getEntityCreateTitle(currentAction.entity) : '')"
       @close="close"
     >
-      <div v-if="currentAction?.mode === 'edit'" class="form-grid">
-        <p>{{ t('admin.editNotImplemented') }}</p>
-        <div class="form-actions">
-          <button type="button" class="btn" @click="close">{{ t('common.actions.understood') }}</button>
-        </div>
-      </div>
-
-      <form v-else-if="currentAction" class="form-grid" @submit.prevent="submit">
+      <form v-if="currentAction" class="form-grid" @submit.prevent="submit">
         <template v-for="field in currentAction.entity.fields" :key="field.key">
           <div v-if="field.type === 'checkbox'" class="field">
             <label :for="field.key" class="field__label">{{ getFieldLabel(currentAction.entity, field) }}</label>
@@ -479,7 +532,7 @@ onMounted(loadRows);
 
         <div class="form-actions">
           <button type="button" class="btn btn--ghost" @click="close">{{ t('common.actions.close') }}</button>
-          <button type="submit" class="btn">{{ t('common.actions.create') }}</button>
+          <button type="submit" class="btn">{{ currentAction.mode === 'edit' ? t('common.actions.save') : t('common.actions.create') }}</button>
         </div>
       </form>
     </BaseModal>

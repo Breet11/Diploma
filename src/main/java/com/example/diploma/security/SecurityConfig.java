@@ -67,6 +67,33 @@ public class SecurityConfig {
                                 HttpSpecs.LoyaltyRule.GET_ALL_ENDPOINT,
                                 HttpSpecs.Rental.GET_ADMIN_ORDERS_ENDPOINT
                         ).hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,
+                                HttpSpecs.Car.ROOT + HttpSpecs.ANY_SUBPATH,
+                                HttpSpecs.CarBrand.ROOT + HttpSpecs.ANY_SUBPATH,
+                                HttpSpecs.CarModel.ROOT + HttpSpecs.ANY_SUBPATH,
+                                HttpSpecs.CarSpecs.ROOT + HttpSpecs.ANY_SUBPATH,
+                                HttpSpecs.Engine.ROOT + HttpSpecs.ANY_SUBPATH,
+                                HttpSpecs.EngineType.ROOT + HttpSpecs.ANY_SUBPATH,
+                                HttpSpecs.LoyaltyRule.ROOT + HttpSpecs.ANY_SUBPATH
+                        ).hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH,
+                                HttpSpecs.Car.ROOT + HttpSpecs.ANY_SUBPATH,
+                                HttpSpecs.CarBrand.ROOT + HttpSpecs.ANY_SUBPATH,
+                                HttpSpecs.CarModel.ROOT + HttpSpecs.ANY_SUBPATH,
+                                HttpSpecs.CarSpecs.ROOT + HttpSpecs.ANY_SUBPATH,
+                                HttpSpecs.Engine.ROOT + HttpSpecs.ANY_SUBPATH,
+                                HttpSpecs.EngineType.ROOT + HttpSpecs.ANY_SUBPATH,
+                                HttpSpecs.LoyaltyRule.ROOT + HttpSpecs.ANY_SUBPATH
+                        ).hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,
+                                HttpSpecs.Car.ROOT + HttpSpecs.ANY_SUBPATH,
+                                HttpSpecs.CarBrand.ROOT + HttpSpecs.ANY_SUBPATH,
+                                HttpSpecs.CarModel.ROOT + HttpSpecs.ANY_SUBPATH,
+                                HttpSpecs.CarSpecs.ROOT + HttpSpecs.ANY_SUBPATH,
+                                HttpSpecs.Engine.ROOT + HttpSpecs.ANY_SUBPATH,
+                                HttpSpecs.EngineType.ROOT + HttpSpecs.ANY_SUBPATH,
+                                HttpSpecs.LoyaltyRule.ROOT + HttpSpecs.ANY_SUBPATH
+                        ).hasRole("ADMIN")
                         .requestMatchers(HttpSpecs.Admin.ALL_ENDPOINTS).hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )

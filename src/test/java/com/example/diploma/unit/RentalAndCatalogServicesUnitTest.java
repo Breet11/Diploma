@@ -6,9 +6,6 @@ import com.example.diploma.car.service.GetCarCatalogServiceCustom;
 import com.example.diploma.carbrand.model.CarBrand;
 import com.example.diploma.carmodel.model.CarModel;
 import com.example.diploma.carspecs.model.CarSpecs;
-import com.example.diploma.engine.model.Engine;
-import com.example.diploma.enginespecs.model.EngineSpecs;
-import com.example.diploma.enginetype.EngineType;
 import com.example.diploma.loyalty.model.LoyaltyRule;
 import com.example.diploma.loyalty.repository.LoyaltyRuleRepository;
 import com.example.diploma.rental.dto.CalculateRentalPriceRequest;
@@ -116,6 +113,9 @@ class CreateRentalServiceCustomTest {
         UUID carUuid = UUID.randomUUID();
         Car car = buildCar("BMW", "M3", 150L);
         User user = new User(UUID.randomUUID(), "user@example.com", "user", "hashed", Role.USER);
+        user.setFirstName("Ivan");
+        user.setLastName("Petrov");
+        user.setPhone("+373123456");
         when(carRepository.findById(carUuid)).thenReturn(Optional.of(car));
         when(userRepository.findByLogin("user")).thenReturn(Optional.of(user));
         when(calculateRentalPriceService.calculatePrice(any())).thenReturn(new com.example.diploma.rental.dto.CalculateRentalPriceResponse(150L, 4L, BigDecimal.ONE, 600L));
@@ -131,7 +131,9 @@ class CreateRentalServiceCustomTest {
         verify(rentalOrderRepository).save(orderCaptor.capture());
         RentalOrder savedOrder = orderCaptor.getValue();
         assertEquals(user, savedOrder.getUser());
-        assertNull(savedOrder.getPhone());
+        assertEquals("Ivan", savedOrder.getFirstName());
+        assertEquals("Petrov", savedOrder.getLastName());
+        assertEquals("+373123456", savedOrder.getPhone());
         assertEquals("NEW", savedOrder.getStatus());
         assertEquals(600L, response.totalPrice());
     }
@@ -217,6 +219,7 @@ class GetRentalOrdersServiceCustomTest {
         RentalOrder authenticatedOrder = new RentalOrder();
         authenticatedOrder.setUuid(UUID.randomUUID());
         authenticatedOrder.setUser(new User(UUID.randomUUID(), "auth@example.com", "authUser", "hashed", Role.USER));
+        authenticatedOrder.setPhone("+373111111");
         authenticatedOrder.setCar(buildCar("Tesla", "Model S", 300L));
         authenticatedOrder.setHours(5L);
         authenticatedOrder.setTotalPrice(1200L);
@@ -240,7 +243,7 @@ class GetRentalOrdersServiceCustomTest {
 
         assertEquals(2, result.size());
         assertEquals("authUser (auth@example.com)", result.getFirst().customer());
-        assertEquals("-", result.getFirst().phone());
+        assertEquals("+373111111", result.getFirst().phone());
         assertEquals("Guest User", result.getLast().customer());
         assertEquals("+373999999", result.getLast().phone());
         assertEquals("Toyota Camry", result.getLast().car());
@@ -270,34 +273,21 @@ class GetCarCatalogServiceCustomTest {
 
     @Test
     void shouldMapCarsToCatalogItemsIncludingImage() {
-        EngineType engineType = new EngineType();
-        engineType.setEngineType("Hybrid");
-        EngineSpecs engineSpecs = new EngineSpecs();
-        engineSpecs.setEngineType(engineType);
-        Engine engine = new Engine();
-        engine.setEngineSpecs(engineSpecs);
+        var item = mockCatalogProjection(
+                UUID.randomUUID(),
+                "Lexus",
+                "RX",
+                2024L,
+                210L,
+                "7.5s",
+                "Hybrid",
+                250L,
+                new byte[]{1, 2, 3},
+                "image/png",
+                true
+        );
 
-        CarBrand brand = new CarBrand();
-        brand.setName("Lexus");
-        CarModel model = new CarModel();
-        model.setName("RX");
-        CarSpecs specs = new CarSpecs();
-        specs.setCarBrand(brand);
-        specs.setCarModel(model);
-        specs.setReleaseYear(2024L);
-        specs.setTopSpeed(210L);
-        specs.setAcceleration("7.5s");
-
-        Car car = new Car();
-        car.setUuid(UUID.randomUUID());
-        car.setCarSpecs(specs);
-        car.setEngine(engine);
-        car.setPrice(250L);
-        car.setImageBlob(new byte[]{1, 2, 3});
-        car.setImageContentType("image/png");
-        car.setAvailable(true);
-
-        when(carRepository.findAll()).thenReturn(List.of(car));
+        when(carRepository.findCatalogItems()).thenReturn(List.of(item));
 
         var result = getCarCatalogService.getCatalog();
 
@@ -312,37 +302,54 @@ class GetCarCatalogServiceCustomTest {
 
     @Test
     void shouldReturnNullImageWhenBlobIsMissing() {
-        EngineType engineType = new EngineType();
-        engineType.setEngineType("Diesel");
-        EngineSpecs engineSpecs = new EngineSpecs();
-        engineSpecs.setEngineType(engineType);
-        Engine engine = new Engine();
-        engine.setEngineSpecs(engineSpecs);
+        var item = mockCatalogProjection(
+                UUID.randomUUID(),
+                "Skoda",
+                "Octavia",
+                2020L,
+                190L,
+                "8.1s",
+                "Diesel",
+                120L,
+                null,
+                null,
+                false
+        );
 
-        CarBrand brand = new CarBrand();
-        brand.setName("Skoda");
-        CarModel model = new CarModel();
-        model.setName("Octavia");
-        CarSpecs specs = new CarSpecs();
-        specs.setCarBrand(brand);
-        specs.setCarModel(model);
-        specs.setReleaseYear(2020L);
-        specs.setTopSpeed(190L);
-        specs.setAcceleration("8.1s");
-
-        Car car = new Car();
-        car.setUuid(UUID.randomUUID());
-        car.setCarSpecs(specs);
-        car.setEngine(engine);
-        car.setPrice(120L);
-        car.setAvailable(false);
-
-        when(carRepository.findAll()).thenReturn(List.of(car));
+        when(carRepository.findCatalogItems()).thenReturn(List.of(item));
 
         var result = getCarCatalogService.getCatalog();
 
         assertNull(result.getFirst().imageBase64());
         assertNull(result.getFirst().imageContentType());
+    }
+
+    private CarRepository.CarCatalogProjection mockCatalogProjection(
+            UUID uuid,
+            String brand,
+            String model,
+            Long releaseYear,
+            Long topSpeed,
+            String acceleration,
+            String engineType,
+            Long hourlyPrice,
+            byte[] imageBlob,
+            String imageContentType,
+            boolean available
+    ) {
+        CarRepository.CarCatalogProjection projection = org.mockito.Mockito.mock(CarRepository.CarCatalogProjection.class);
+        when(projection.getUuid()).thenReturn(uuid);
+        when(projection.getBrand()).thenReturn(brand);
+        when(projection.getModel()).thenReturn(model);
+        when(projection.getReleaseYear()).thenReturn(releaseYear);
+        when(projection.getTopSpeed()).thenReturn(topSpeed);
+        when(projection.getAcceleration()).thenReturn(acceleration);
+        when(projection.getEngineType()).thenReturn(engineType);
+        when(projection.getHourlyRentalPrice()).thenReturn(hourlyPrice);
+        when(projection.getImageBlob()).thenReturn(imageBlob);
+        when(projection.getImageContentType()).thenReturn(imageContentType);
+        when(projection.isAvailable()).thenReturn(available);
+        return projection;
     }
 }
 

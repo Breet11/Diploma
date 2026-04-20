@@ -15,7 +15,14 @@ public class GetProfileServiceCustom implements GetProfileService {
         var user = userRepository.findByLogin(login)
                 .orElseThrow(() -> new IllegalArgumentException("User with login " + login + " not found"));
 
-        return new ProfileResponseDto(user.getEmail(), user.getLogin(), user.getRole().name());
+        return new ProfileResponseDto(
+                user.getEmail(),
+                user.getLogin(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getPhone(),
+                user.getRole().name()
+        );
     }
 }
 

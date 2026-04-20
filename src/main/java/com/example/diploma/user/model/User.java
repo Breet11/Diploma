@@ -25,10 +25,27 @@ public class User {
     @Column(name = "login" ,nullable = false)
     private String login;
 
+    @Column(name = "first_name", nullable = false)
+    private String firstName;
+
+    @Column(name = "last_name", nullable = false)
+    private String lastName;
+
+    @Column(name = "phone", nullable = false)
+    private String phone;
+
     @Column(name = "hashed_password", nullable = false)
     private String hashedPassword;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     private Role role;
+
+    public User(UUID uuid, String email, String login, String hashedPassword, Role role) {
+        this.uuid = uuid;
+        this.email = email;
+        this.login = login;
+        this.hashedPassword = hashedPassword;
+        this.role = role;
+    }
 }

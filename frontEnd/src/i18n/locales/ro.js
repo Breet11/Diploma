@@ -14,7 +14,9 @@ export default {
     actions: {
       close: 'Închide',
       create: 'Creează',
+      save: 'Salvează',
       edit: 'Editează',
+      delete: 'Șterge',
       understood: 'Am înțeles',
       submitRequest: 'Trimite cererea',
       backToLogin: 'Înapoi la autentificare',
@@ -36,6 +38,7 @@ export default {
       login: 'Login',
       email: 'Email',
       password: 'Parolă',
+      confirmPassword: 'Confirmare parolă',
       role: 'Rol',
       firstName: 'Prenume',
       lastName: 'Nume',
@@ -82,7 +85,7 @@ export default {
     acceleration: 'Accelerație',
     engine: 'Motor',
     rent: 'Închiriază',
-    pricePerHour: '₽ / oră',
+    pricePerHour: '/ oră',
     kmPerHour: 'km/h',
     liters: 'l'
   },
@@ -99,6 +102,9 @@ export default {
     sidebarTitle: 'Nomenclatoare',
     empty: 'Nu există date',
     createSuccess: 'Înregistrarea a fost creată cu succes',
+    updateSuccess: 'Înregistrarea a fost actualizată cu succes',
+    deleteSuccess: 'Înregistrarea a fost ștearsă cu succes',
+    confirmDelete: 'Ștergeți această înregistrare?',
     editDialogTitle: 'Editare',
     editNotImplemented: 'Interfața pentru editare este deja pregătită. Pentru salvare trebuie adăugate endpoint-uri backend PUT/PATCH.',
     entities: {
@@ -222,7 +228,8 @@ export default {
   errors: {
     browserCryptoUnsupported: 'Browserul dumneavoastră nu suportă Web Crypto API',
     publicKeyMissing: 'Completați PUBLIC_KEY_PEM cu o cheie publică RSA reală în format PEM',
-    requestFailed: 'Cererea a eșuat: {status}'
+    requestFailed: 'Cererea a eșuat: {status}',
+    passwordsDoNotMatch: 'Parola și confirmarea parolei nu coincid'
   }
 };
 

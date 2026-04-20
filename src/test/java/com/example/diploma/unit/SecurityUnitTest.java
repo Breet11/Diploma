@@ -60,8 +60,8 @@ class JwtServiceTest {
 	}
 
 	@Test
-	void shouldRejectExpiredToken() throws InterruptedException {
-		JwtService jwtService = new JwtService(SECRET, 1L);
+	void shouldRejectExpiredToken() {
+		JwtService jwtService = new JwtService(SECRET, -1L);
 		com.example.diploma.user.model.User domainUser = new com.example.diploma.user.model.User(
 				null,
 				"user@example.com",
@@ -72,7 +72,6 @@ class JwtServiceTest {
 		UserDetails userDetails = User.withUsername("user").password("hashed").roles("USER").build();
 		String token = jwtService.generateToken(domainUser);
 
-		Thread.sleep(10L);
 
 		assertFalse(jwtService.isTokenValid(token, userDetails));
 	}

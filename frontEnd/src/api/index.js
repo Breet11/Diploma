@@ -1,93 +1,121 @@
-import { http } from './http';
+import { apiClient } from './http';
 
 export const api = {
 
   login(payload) {
-    return http('/user/login', {
-      method: 'POST',
-      body: JSON.stringify(payload)
-    });
+    return apiClient.post('/user/login', payload);
   },
 
   register(payload) {
-    return http('/user/register', {
-      method: 'POST',
-      body: JSON.stringify(payload)
-    });
+    return apiClient.post('/user/register', payload);
   },
 
   getCars() {
-    return http('/cars');
+    return apiClient.get('/cars');
   },
 
   calculateRentalPrice(payload) {
-    return http('/rentals/price', {
-      method: 'POST',
-      body: JSON.stringify(payload)
-    });
+    return apiClient.post('/rentals/price', payload);
   },
 
   createRental(payload) {
-    return http('/rentals', {
-      method: 'POST',
-      body: JSON.stringify(payload)
-    });
+    return apiClient.post('/rentals', payload);
   },
 
   getAdminRentalOrders() {
-    return http('/rentals/admin');
+    return apiClient.get('/rentals/admin');
   },
 
   getProfile() {
-    return http('/profile/me');
+    return apiClient.get('/profile/me');
   },
 
   createCarBrand(payload) {
-    return http('/car-brands', { method: 'POST', body: JSON.stringify(payload) });
+    return apiClient.post('/car-brands', payload);
+  },
+
+  updateCarBrand(uuid, payload) {
+    return apiClient.put(`/car-brands/${uuid}`, payload);
+  },
+
+  deleteCarBrand(uuid) {
+    return apiClient.delete(`/car-brands/${uuid}`);
   },
 
   getCarBrands() {
-    return http('/car-brands');
+    return apiClient.get('/car-brands');
   },
 
   createCarModel(payload) {
-    return http('/car-models', { method: 'POST', body: JSON.stringify(payload) });
+    return apiClient.post('/car-models', payload);
+  },
+
+  updateCarModel(uuid, payload) {
+    return apiClient.put(`/car-models/${uuid}`, payload);
+  },
+
+  deleteCarModel(uuid) {
+    return apiClient.delete(`/car-models/${uuid}`);
   },
 
   getCarModels() {
-    return http('/car-models');
+    return apiClient.get('/car-models');
   },
 
   createEngineType(payload) {
-    return http('/engine-types', { method: 'POST', body: JSON.stringify(payload) });
+    return apiClient.post('/engine-types', payload);
+  },
+
+  updateEngineType(uuid, payload) {
+    return apiClient.put(`/engine-types/${uuid}`, payload);
+  },
+
+  deleteEngineType(uuid) {
+    return apiClient.delete(`/engine-types/${uuid}`);
   },
 
   getEngineTypes() {
-    return http('/engine-types');
+    return apiClient.get('/engine-types');
   },
 
   createEngineSpecs(payload) {
-    return http('/engine-specs', { method: 'POST', body: JSON.stringify(payload) });
+    return apiClient.post('/engine-specs', payload);
   },
 
   getEngineSpecs() {
-    return http('/engine-specs');
+    return apiClient.get('/engine-specs');
   },
 
   createEngine(payload) {
-    return http('/engines', { method: 'POST', body: JSON.stringify(payload) });
+    return apiClient.post('/engines', payload);
+  },
+
+  updateEngine(uuid, payload) {
+    return apiClient.put(`/engines/${uuid}`, payload);
+  },
+
+  deleteEngine(uuid) {
+    return apiClient.delete(`/engines/${uuid}`);
   },
 
   getEngines() {
-    return http('/engines');
+    return apiClient.get('/engines');
   },
 
   createCarSpecs(payload) {
-    return http('/car-specs', { method: 'POST', body: JSON.stringify(payload) });
+    return apiClient.post('/car-specs', payload);
+  },
+
+  updateCarSpecs(uuid, payload) {
+    return apiClient.put(`/car-specs/${uuid}`, payload);
+  },
+
+  deleteCarSpecs(uuid) {
+    return apiClient.delete(`/car-specs/${uuid}`);
   },
 
   getCarSpecs() {
-    return http('/car-specs');
+    return apiClient.get('/car-specs');
   },
 
   createCar(payload, imageFile) {
@@ -96,14 +124,35 @@ export const api = {
     if (imageFile) {
       formData.append('image', imageFile);
     }
-    return http('/cars', { method: 'POST', body: formData });
+    return apiClient.post('/cars', formData);
+  },
+
+  updateCar(uuid, payload, imageFile) {
+    const formData = new FormData();
+    formData.append('payload', new Blob([JSON.stringify(payload)], { type: 'application/json' }));
+    if (imageFile) {
+      formData.append('image', imageFile);
+    }
+    return apiClient.put(`/cars/${uuid}`, formData);
+  },
+
+  deleteCar(uuid) {
+    return apiClient.delete(`/cars/${uuid}`);
   },
 
   getLoyaltyRules() {
-    return http('/loyalty-rules');
+    return apiClient.get('/loyalty-rules');
   },
 
   createLoyaltyRule(payload) {
-    return http('/loyalty-rules', { method: 'POST', body: JSON.stringify(payload) });
+    return apiClient.post('/loyalty-rules', payload);
+  },
+
+  updateLoyaltyRule(uuid, payload) {
+    return apiClient.put(`/loyalty-rules/${uuid}`, payload);
+  },
+
+  deleteLoyaltyRule(uuid) {
+    return apiClient.delete(`/loyalty-rules/${uuid}`);
   }
 };

@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.util.UUID;
 
@@ -32,9 +34,8 @@ public class Car {
     @Column(nullable = false)
     private Long price;
 
-    @Lob
-    @Basic(fetch = FetchType.LAZY)
-    @Column(name = "image_blob")
+    @JdbcTypeCode(SqlTypes.VARBINARY)
+    @Column(name = "image_blob", columnDefinition = "bytea")
     private byte[] imageBlob;
 
     @Column(name = "image_content_type")

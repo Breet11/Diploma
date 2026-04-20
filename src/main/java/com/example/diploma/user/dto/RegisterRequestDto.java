@@ -6,6 +6,10 @@ import jakarta.validation.constraints.NotBlank;
 public record RegisterRequestDto(
         @Email @NotBlank String email,
         @NotBlank String login,
-        @NotBlank String password
+        @NotBlank String firstName,
+        @NotBlank String lastName,
+        @NotBlank String phone,
+        @NotBlank String password,
+        @NotBlank String confirmPassword
 ) {
 }

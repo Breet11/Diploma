@@ -1,49 +1,46 @@
+import axios from 'axios';
 import { clearAuth, getToken } from '../utils/auth';
 import i18n from '../i18n';
 
 const BASE_URL = 'http://localhost:8080';
 
-export async function http(path, options = {}) {
-  const isFormData = options.body instanceof FormData;
-  const headers = {
-    ...(options.headers || {})
-  };
-
-  if (!isFormData) {
-    headers['Content-Type'] = 'application/json';
+export const apiClient = axios.create({
+  baseURL: BASE_URL,
+  headers: {
+    'Content-Type': 'application/json'
   }
+});
 
+apiClient.interceptors.request.use((config) => {
   const token = getToken();
   if (token) {
-    headers.Authorization = `Bearer ${token}`;
+    config.headers.Authorization = `Bearer ${token}`;
   }
 
-  const response = await fetch(`${BASE_URL}${path}`, {
-    ...options,
-    headers
-  });
+  if (config.data instanceof FormData) {
+    // Let the browser set multipart boundary automatically.
+    delete config.headers['Content-Type'];
+  }
 
-  const text = await response.text();
-  const data = parseResponseText(text);
+  return config;
+});
 
-  if (!response.ok) {
-    if (response.status === 401 || response.status === 403) {
+apiClient.interceptors.response.use(
+  (response) => response.data,
+  (error) => {
+    const status = error?.response?.status;
+    if (status === 401 || status === 403) {
       clearAuth();
     }
-    throw new Error(data?.message || data || i18n.global.t('errors.requestFailed', { status: response.status }));
-  }
 
-  return data;
-}
+    const fallbackMessage = i18n.global.t('errors.requestFailed', { status: status || 'network' });
+    const responseData = error?.response?.data;
+    const message =
+      responseData?.message ||
+      (typeof responseData === 'string' ? responseData : null) ||
+      error?.message ||
+      fallbackMessage;
 
-function parseResponseText(text) {
-  if (!text) {
-    return null;
+    return Promise.reject(new Error(message));
   }
-
-  try {
-    return JSON.parse(text);
-  } catch {
-    return text;
-  }
-}
+);

@@ -14,7 +14,9 @@ export default {
     actions: {
       close: 'Close',
       create: 'Create',
+      save: 'Save',
       edit: 'Edit',
+      delete: 'Delete',
       understood: 'Understood',
       submitRequest: 'Submit request',
       backToLogin: 'Back to login',
@@ -36,6 +38,7 @@ export default {
       login: 'Login',
       email: 'Email',
       password: 'Password',
+      confirmPassword: 'Confirm password',
       role: 'Role',
       firstName: 'First name',
       lastName: 'Last name',
@@ -82,7 +85,7 @@ export default {
     acceleration: 'Acceleration',
     engine: 'Engine',
     rent: 'Rent',
-    pricePerHour: '₽ / hour',
+    pricePerHour: '/ hour',
     kmPerHour: 'km/h',
     liters: 'L'
   },
@@ -99,6 +102,9 @@ export default {
     sidebarTitle: 'Directories',
     empty: 'No data',
     createSuccess: 'Record created successfully',
+    updateSuccess: 'Record updated successfully',
+    deleteSuccess: 'Record deleted successfully',
+    confirmDelete: 'Delete this record?',
     editDialogTitle: 'Editing',
     editNotImplemented: 'The editing UI is already prepared. Backend PUT/PATCH endpoints still need to be added.',
     entities: {
@@ -222,7 +228,8 @@ export default {
   errors: {
     browserCryptoUnsupported: 'Your browser does not support the Web Crypto API',
     publicKeyMissing: 'Fill PUBLIC_KEY_PEM with a real RSA public key in PEM format',
-    requestFailed: 'Request failed: {status}'
+    requestFailed: 'Request failed: {status}',
+    passwordsDoNotMatch: 'Password and confirmation password do not match'
   }
 };
 

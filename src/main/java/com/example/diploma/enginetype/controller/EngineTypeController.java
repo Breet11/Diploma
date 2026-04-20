@@ -7,8 +7,12 @@ import com.example.diploma.utils.HTTP.HttpSpecs;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,6 +38,28 @@ public class EngineTypeController {
     @PostMapping(HttpSpecs.EngineType.CREATE)
     public ResponseEntity<UUID> createEngineType(@Valid @RequestBody CreateEngineTypeRequest createEngineTypeRequest) {
         return ResponseEntity.ok(createEngineTypeService.createEngineType(createEngineTypeRequest).getUuid());
+    }
+
+    @PutMapping("/{uuid}")
+    public ResponseEntity<UUID> updateEngineType(
+            @PathVariable UUID uuid,
+            @Valid @RequestBody CreateEngineTypeRequest createEngineTypeRequest
+    ) {
+        return ResponseEntity.ok(createEngineTypeService.updateEngineType(uuid, createEngineTypeRequest).getUuid());
+    }
+
+    @PatchMapping("/{uuid}")
+    public ResponseEntity<UUID> patchEngineType(
+            @PathVariable UUID uuid,
+            @Valid @RequestBody CreateEngineTypeRequest createEngineTypeRequest
+    ) {
+        return ResponseEntity.ok(createEngineTypeService.updateEngineType(uuid, createEngineTypeRequest).getUuid());
+    }
+
+    @DeleteMapping("/{uuid}")
+    public ResponseEntity<Void> deleteEngineType(@PathVariable UUID uuid) {
+        createEngineTypeService.deleteEngineType(uuid);
+        return ResponseEntity.noContent().build();
     }
 
     private record EngineTypeListItem(UUID uuid, String engineType) {

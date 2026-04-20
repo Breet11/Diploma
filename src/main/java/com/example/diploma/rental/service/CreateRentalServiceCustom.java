@@ -39,7 +39,13 @@ public class CreateRentalServiceCustom implements CreateRentalService {
         if (currentLogin != null) {
             var user = userRepository.findByLogin(currentLogin)
                     .orElseThrow(() -> new IllegalArgumentException("User with login " + currentLogin + " not found"));
+            if (isBlank(user.getFirstName()) || isBlank(user.getLastName()) || isBlank(user.getPhone())) {
+                throw new IllegalArgumentException("Authorized user profile must contain firstName, lastName and phone");
+            }
             rentalOrder.setUser(user);
+            rentalOrder.setFirstName(user.getFirstName());
+            rentalOrder.setLastName(user.getLastName());
+            rentalOrder.setPhone(user.getPhone());
         } else {
             if (!createRentalRequest.hasGuestContactData()) {
                 throw new IllegalArgumentException("Guest must provide firstName, lastName and phone");
@@ -56,6 +62,10 @@ public class CreateRentalServiceCustom implements CreateRentalService {
                 saved.getTotalPrice(),
                 "Заявка успешно создана. С вами свяжется менеджер."
         );
+    }
+
+    private boolean isBlank(String value) {
+        return value == null || value.isBlank();
     }
 }
 

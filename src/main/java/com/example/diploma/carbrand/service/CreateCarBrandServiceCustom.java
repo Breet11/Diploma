@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.StreamSupport;
 
 @Service
@@ -27,6 +28,21 @@ public class CreateCarBrandServiceCustom implements CreateCarBrandService {
         CarBrand carBrand = new CarBrand();
         carBrand.setName(createCarBrandRequest.name());
         return carBrandRepository.save(carBrand);
+    }
+
+    @Override
+    public CarBrand updateCarBrand(UUID uuid, CreateCarBrandRequest createCarBrandRequest) {
+        CarBrand carBrand = carBrandRepository.findById(uuid)
+                .orElseThrow(() -> new IllegalArgumentException("Car brand with id " + uuid + " not found"));
+        carBrand.setName(createCarBrandRequest.name());
+        return carBrandRepository.save(carBrand);
+    }
+
+    @Override
+    public void deleteCarBrand(UUID uuid) {
+        CarBrand carBrand = carBrandRepository.findById(uuid)
+                .orElseThrow(() -> new IllegalArgumentException("Car brand with id " + uuid + " not found"));
+        carBrandRepository.delete(carBrand);
     }
 }
 

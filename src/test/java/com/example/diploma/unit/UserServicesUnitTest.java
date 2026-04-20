@@ -95,9 +95,18 @@ class AuthServiceCustomTest {
 
     @Test
     void registerShouldCreateRegularUserWithEncodedDecryptedPassword() {
-        RegisterRequestDto request = new RegisterRequestDto("user@example.com", "user", "encrypted");
+        RegisterRequestDto request = new RegisterRequestDto(
+                "user@example.com",
+                "user",
+                "John",
+                "Doe",
+                "+10000000001",
+                "encrypted",
+                "encrypted-confirm"
+        );
         when(userRepository.findByLogin("user")).thenReturn(Optional.empty());
         when(decryptAuthPasswordService.decrypt("encrypted")).thenReturn("plainPassword");
+        when(decryptAuthPasswordService.decrypt("encrypted-confirm")).thenReturn("plainPassword");
         when(passwordEncoder.encode("plainPassword")).thenReturn("encodedPassword");
 
         var response = authService.register(request);
@@ -107,6 +116,9 @@ class AuthServiceCustomTest {
         User saved = userCaptor.getValue();
         assertEquals("user@example.com", saved.getEmail());
         assertEquals("user", saved.getLogin());
+        assertEquals("John", saved.getFirstName());
+        assertEquals("Doe", saved.getLastName());
+        assertEquals("+10000000001", saved.getPhone());
         assertEquals("encodedPassword", saved.getHashedPassword());
         assertEquals(Role.USER, saved.getRole());
         assertEquals("User registered successfully", response.message());
@@ -118,10 +130,42 @@ class AuthServiceCustomTest {
 
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> authService.register(new RegisterRequestDto("user@example.com", "user", "encrypted"))
+                () -> authService.register(new RegisterRequestDto(
+                        "user@example.com",
+                        "user",
+                        "John",
+                        "Doe",
+                        "+10000000001",
+                        "encrypted",
+                        "encrypted-confirm"
+                ))
         );
 
         assertEquals("User with login user already exists", exception.getMessage());
+        verify(userRepository, never()).save(any());
+    }
+
+    @Test
+    void registerShouldFailWhenPasswordsDoNotMatch() {
+        RegisterRequestDto request = new RegisterRequestDto(
+                "user@example.com",
+                "user",
+                "John",
+                "Doe",
+                "+10000000001",
+                "encrypted",
+                "encrypted-confirm"
+        );
+        when(userRepository.findByLogin("user")).thenReturn(Optional.empty());
+        when(decryptAuthPasswordService.decrypt("encrypted")).thenReturn("plainPassword");
+        when(decryptAuthPasswordService.decrypt("encrypted-confirm")).thenReturn("differentPassword");
+
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> authService.register(request)
+        );
+
+        assertEquals("Password and confirmation password do not match", exception.getMessage());
         verify(userRepository, never()).save(any());
     }
 }
@@ -164,7 +208,7 @@ class CreateUserServiceCustomTest {
 
     @Test
     void shouldCreateUserWithDefaultRole() {
-        CreateUserRequestDto request = new CreateUserRequestDto("user@example.com", "user", "password", null);
+        CreateUserRequestDto request = new CreateUserRequestDto("user@example.com", "user", "John", "Doe", "+10000000001", "password", null);
         when(userRepository.findByLogin("user")).thenReturn(Optional.empty());
         when(passwordEncoder.encode("password")).thenReturn("encodedPassword");
 
@@ -178,7 +222,7 @@ class CreateUserServiceCustomTest {
 
     @Test
     void shouldCreateUserWithExplicitRole() {
-        CreateUserRequestDto request = new CreateUserRequestDto("admin@example.com", "admin", "password", Role.ADMIN);
+        CreateUserRequestDto request = new CreateUserRequestDto("admin@example.com", "admin", "John", "Doe", "+10000000001", "password", Role.ADMIN);
         when(userRepository.findByLogin("admin")).thenReturn(Optional.empty());
         when(passwordEncoder.encode("password")).thenReturn("encodedPassword");
 
@@ -195,7 +239,7 @@ class CreateUserServiceCustomTest {
 
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> createUserService.createUser(new CreateUserRequestDto("user@example.com", "user", "password", null))
+                () -> createUserService.createUser(new CreateUserRequestDto("user@example.com", "user", "John", "Doe", "+10000000001", "password", null))
         );
 
         assertEquals("User with login user already exists", exception.getMessage());
@@ -213,12 +257,18 @@ class GetProfileServiceCustomTest {
     @Test
     void shouldReturnProfileDto() {
         User user = new User(UUID.randomUUID(), "user@example.com", "user", "hashed", Role.USER);
+        user.setFirstName("John");
+        user.setLastName("Doe");
+        user.setPhone("+10000000001");
         when(userRepository.findByLogin("user")).thenReturn(Optional.of(user));
 
         var response = getProfileService.getProfile("user");
 
         assertEquals("user@example.com", response.email());
         assertEquals("user", response.login());
+        assertEquals("John", response.firstName());
+        assertEquals("Doe", response.lastName());
+        assertEquals("+10000000001", response.phone());
         assertEquals("USER", response.role());
     }
 

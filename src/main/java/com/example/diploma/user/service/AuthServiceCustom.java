@@ -60,11 +60,18 @@ public class AuthServiceCustom implements AuthService {
                 });
 
         String decryptedPassword = decryptAuthPasswordService.decrypt(registerRequestDto.password());
+        String decryptedConfirmPassword = decryptAuthPasswordService.decrypt(registerRequestDto.confirmPassword());
+        if (!decryptedPassword.equals(decryptedConfirmPassword)) {
+            throw new IllegalArgumentException("Password and confirmation password do not match");
+        }
 
         User user = new User(
                 null,
                 registerRequestDto.email(),
                 registerRequestDto.login(),
+                registerRequestDto.firstName(),
+                registerRequestDto.lastName(),
+                registerRequestDto.phone(),
                 passwordEncoder.encode(decryptedPassword),
                 Role.USER
         );
