@@ -1,0 +1,15 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="20260423-1-clear-seed-inline-images" author="vrijenco">
+        <sql splitStatements="false" stripComments="true"><![CDATA[
+            UPDATE dip_car
+            SET image_blob = NULL,
+                image_content_type = NULL
+            WHERE image_url LIKE 'seed:%';
+        ]]></sql>
+    </changeSet>
+</databaseChangeLog>
+

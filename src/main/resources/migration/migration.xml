@@ -10,4 +10,5 @@
     <include file="20260406-seed-test-users.xml" relativeToChangelogFile="true"/>
     <include file="20260416-seed-car-catalog.xml" relativeToChangelogFile="true"/>
     <include file="20260420-add-user-contact-fields.xml" relativeToChangelogFile="true"/>
+    <include file="20260423-local-seed-image-placeholders.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

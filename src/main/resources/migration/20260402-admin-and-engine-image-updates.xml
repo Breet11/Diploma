@@ -3,21 +3,21 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet id="20260402-1-car-image-blob" author="copilot">
+    <changeSet id="20260402-1-car-image-blob" author="vrijenco">
         <addColumn tableName="dip_car">
             <column name="image_blob" type="BYTEA"/>
             <column name="image_content_type" type="VARCHAR(100)"/>
         </addColumn>
     </changeSet>
 
-    <changeSet id="20260402-2-engine-name" author="copilot">
+    <changeSet id="20260402-2-engine-name" author="vrijenco">
         <addColumn tableName="dip_engine">
             <column name="engine_name" type="VARCHAR(255)" defaultValue="Engine"/>
         </addColumn>
         <addNotNullConstraint tableName="dip_engine" columnName="engine_name" columnDataType="VARCHAR(255)"/>
     </changeSet>
 
-    <changeSet id="20260402-3-engine-volume" author="copilot">
+    <changeSet id="20260402-3-engine-volume" author="vrijenco">
         <addColumn tableName="dip_engine_specs">
             <column name="engine_volume" type="DECIMAL(5,2)" defaultValueNumeric="1.60"/>
         </addColumn>

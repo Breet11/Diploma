@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Local car images used by seed loader (optional)
+local-seed-images/
+

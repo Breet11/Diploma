@@ -3,7 +3,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet id="20260406-1-seed-test-users" author="copilot">
+    <changeSet id="20260406-1-seed-test-users" author="vrijenco">
         <insert tableName="dip_user">
             <column name="uuid" value="f05320b7-8e6d-4ca6-933d-9f2a6c2e7001"/>
             <column name="email" value="admin@test.local"/>
