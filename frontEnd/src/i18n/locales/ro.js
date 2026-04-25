@@ -112,7 +112,34 @@ export default {
     price: 'Preț',
     loyaltyMultiplier: 'Coeficient de loialitate',
     selectedCar: 'Automobil',
-    submitRental: 'Trimite cererea'
+    submitRental: 'Trimite cererea',
+    rentalCreatedSuccess: 'Cererea de închiriere a fost trimisa cu succes',
+    specs: {
+      title: 'Specificații tehnice',
+      releaseYear: 'An fabricație',
+      fuelType: 'Tip combustibil',
+      engineVolume: 'Volum motor (l)',
+      horsepower: 'Cai putere',
+      torque: 'Cuplu',
+      fuelConsumption: 'Consum combustibil',
+      topSpeed: 'Viteză maximă',
+      acceleration: 'Accelerație 0-100'
+    },
+    filters: {
+      title: 'Filtre',
+      brand: 'Marca',
+      model: 'Model',
+      engineType: 'Tip motor',
+      fuelType: 'Tip combustibil',
+      availability: 'Disponibilitate',
+      maxPrice: 'Pret maxim pe ora',
+      releaseYearRange: 'Interval an fabricație',
+      all: 'Toate',
+      reset: 'Reseteaza filtrele',
+      show: 'Arata filtrele',
+      hide: 'Ascunde filtrele',
+      noResults: 'Nu au fost gasite automobile pentru filtrele selectate'
+    }
   },
   admin: {
     title: 'Panou admin',

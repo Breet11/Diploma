@@ -20,6 +20,10 @@ public interface CarRepository extends CrudRepository<Car, UUID> {
 				   cs.topSpeed as topSpeed,
 				   cs.acceleration as acceleration,
 				   et.engineType as engineType,
+				   es.fuelConsumption as fuelConsumption,
+				   es.horsepower as horsepower,
+				   es.torque as torque,
+				   es.engineVolume as engineVolume,
 				   c.price as hourlyRentalPrice,
 				   c.imageBlob as imageBlob,
 				   c.imageContentType as imageContentType,
@@ -52,6 +56,14 @@ public interface CarRepository extends CrudRepository<Car, UUID> {
 		String getAcceleration();
 
 		String getEngineType();
+
+		String getFuelConsumption();
+
+		Long getHorsepower();
+
+		Long getTorque();
+
+		java.math.BigDecimal getEngineVolume();
 
 		Long getHourlyRentalPrice();
 

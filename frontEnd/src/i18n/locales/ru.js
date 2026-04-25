@@ -112,7 +112,34 @@ export default {
     price: 'Стоимость',
     loyaltyMultiplier: 'Коэффициент лояльности',
     selectedCar: 'Автомобиль',
-    submitRental: 'Отправить заявку'
+    submitRental: 'Отправить заявку',
+    rentalCreatedSuccess: 'Заявка на аренду успешно отправлена',
+    specs: {
+      title: 'Технические характеристики',
+      releaseYear: 'Год выпуска',
+      fuelType: 'Тип топлива',
+      engineVolume: 'Объем двигателя (л)',
+      horsepower: 'Лошадиные силы',
+      torque: 'Крутящий момент',
+      fuelConsumption: 'Расход топлива',
+      topSpeed: 'Макс. скорость',
+      acceleration: 'Разгон 0-100'
+    },
+    filters: {
+      title: 'Фильтры',
+      brand: 'Бренд',
+      model: 'Модель',
+      engineType: 'Тип двигателя',
+      fuelType: 'Тип топлива',
+      availability: 'Доступность',
+      maxPrice: 'Максимальная цена в час',
+      releaseYearRange: 'Диапазон года выпуска',
+      all: 'Все',
+      reset: 'Сбросить фильтры',
+      show: 'Показать фильтры',
+      hide: 'Скрыть фильтры',
+      noResults: 'По выбранным фильтрам автомобили не найдены'
+    }
   },
   admin: {
     title: 'Админ панель',

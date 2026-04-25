@@ -198,7 +198,25 @@ class CatalogControllersUnitTest {
     @Test
     void carControllerShouldReturnCatalog() {
         List<CarCatalogItemResponse> response = List.of(
-                new CarCatalogItemResponse(UUID.randomUUID(), "BMW", "M3", 2024L, 250L, "4.0s", "Petrol", 200L, null, null, true)
+                new CarCatalogItemResponse(
+                        UUID.randomUUID(),
+                        UUID.randomUUID(),
+                        UUID.randomUUID(),
+                        "BMW",
+                        "M3",
+                        2024L,
+                        250L,
+                        "4.0s",
+                        "Petrol",
+                        "8.5 l/100km",
+                        420L,
+                        500L,
+                        "3.00",
+                        200L,
+                        null,
+                        null,
+                        true
+                )
         );
         when(getCarCatalogService.getCatalog()).thenReturn(response);
 

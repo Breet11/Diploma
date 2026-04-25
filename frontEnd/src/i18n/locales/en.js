@@ -112,7 +112,34 @@ export default {
     price: 'Price',
     loyaltyMultiplier: 'Loyalty multiplier',
     selectedCar: 'Car',
-    submitRental: 'Submit request'
+    submitRental: 'Submit request',
+    rentalCreatedSuccess: 'Rental request submitted successfully',
+    specs: {
+      title: 'Technical specs',
+      releaseYear: 'Release year',
+      fuelType: 'Fuel type',
+      engineVolume: 'Engine volume (L)',
+      horsepower: 'Horsepower',
+      torque: 'Torque',
+      fuelConsumption: 'Fuel consumption',
+      topSpeed: 'Top speed',
+      acceleration: '0-100 acceleration'
+    },
+    filters: {
+      title: 'Filters',
+      brand: 'Brand',
+      model: 'Model',
+      engineType: 'Engine type',
+      fuelType: 'Fuel type',
+      availability: 'Availability',
+      maxPrice: 'Max price per hour',
+      releaseYearRange: 'Release year range',
+      all: 'All',
+      reset: 'Reset filters',
+      show: 'Show filters',
+      hide: 'Hide filters',
+      noResults: 'No cars found by selected filters'
+    }
   },
   admin: {
     title: 'Admin panel',
