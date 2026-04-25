@@ -61,6 +61,7 @@ export default {
     adminPanel: 'Админ панель',
     profile: 'Личный кабинет',
     loginAccount: 'Войти в аккаунт',
+    menu: 'Меню',
     language: 'Язык'
   },
   home: {

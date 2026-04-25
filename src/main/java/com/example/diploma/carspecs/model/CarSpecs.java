@@ -1,6 +1,5 @@
 package com.example.diploma.carspecs.model;
 
-import com.example.diploma.car.model.Car;
 import com.example.diploma.carbrand.model.CarBrand;
 import com.example.diploma.carmodel.model.CarModel;
 import jakarta.persistence.*;
@@ -38,7 +37,4 @@ public class CarSpecs {
 
     @Column(nullable = false)
     private Long releaseYear;
-
-    @OneToOne(mappedBy = "carSpecs")
-    private Car car;
 }

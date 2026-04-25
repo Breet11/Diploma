@@ -1,0 +1,11 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="20260425-1-drop-car-unique-relations" author="vrijenco">
+        <dropUniqueConstraint tableName="dip_car" constraintName="uc_dip_car_engine_uuid"/>
+        <dropUniqueConstraint tableName="dip_car" constraintName="uc_dip_car_specs_uuid"/>
+    </changeSet>
+</databaseChangeLog>
+

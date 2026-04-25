@@ -1,6 +1,5 @@
 package com.example.diploma.engine.model;
 
-import com.example.diploma.car.model.Car;
 import com.example.diploma.enginespecs.model.EngineSpecs;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -26,6 +25,4 @@ public class Engine {
     @Column(name = "engine_name", nullable = false)
     private String engineName;
 
-    @OneToOne(mappedBy = "engine", fetch = FetchType.LAZY)
-    private Car car;
 }

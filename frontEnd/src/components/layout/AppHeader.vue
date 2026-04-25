@@ -7,6 +7,54 @@
 
       <v-spacer />
 
+      <v-menu class="header__mobile-menu" location="bottom end">
+        <template #activator="{ props: menuProps }">
+          <v-btn
+            v-bind="menuProps"
+            icon
+            variant="text"
+            class="header__mobile-menu-btn"
+            :title="t('header.menu')"
+            :aria-label="t('header.menu')"
+          >
+            <v-icon icon="mdi-menu" />
+          </v-btn>
+        </template>
+
+        <v-list density="comfortable" min-width="240">
+          <v-list-item prepend-icon="mdi-car-side" :to="{ name: 'cars' }">
+            <v-list-item-title>{{ t('header.cars') }}</v-list-item-title>
+          </v-list-item>
+
+          <v-list-item v-if="admin" prepend-icon="mdi-shield-crown-outline" :to="{ name: 'admin' }">
+            <v-list-item-title>{{ t('header.adminPanel') }}</v-list-item-title>
+          </v-list-item>
+
+          <v-list-item prepend-icon="mdi-account-circle-outline" :to="accountRoute">
+            <v-list-item-title>{{ authorized ? t('header.profile') : t('header.loginAccount') }}</v-list-item-title>
+          </v-list-item>
+
+          <v-divider class="my-1" />
+          <v-list-subheader>
+            <v-icon icon="mdi-translate" start />
+            {{ t('header.language') }}
+          </v-list-subheader>
+          <v-list-item
+            v-for="item in localeOptions"
+            :key="`mobile-${item.value}`"
+            :active="item.value === selectedLocale"
+            @click="selectedLocale = item.value"
+          >
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item>
+
+          <v-divider v-if="authorized" class="my-1" />
+          <v-list-item v-if="authorized" prepend-icon="mdi-logout" @click="logout">
+            <v-list-item-title>{{ t('common.actions.logout') }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+
       <div class="header__nav">
         <v-btn variant="text" :to="{ name: 'cars' }">
           {{ t('header.cars') }}

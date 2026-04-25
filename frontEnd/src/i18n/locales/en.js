@@ -61,6 +61,7 @@ export default {
     adminPanel: 'Admin panel',
     profile: 'Profile',
     loginAccount: 'Log in',
+    menu: 'Menu',
     language: 'Language'
   },
   home: {

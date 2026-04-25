@@ -61,6 +61,7 @@ export default {
     adminPanel: 'Panou admin',
     profile: 'Profil',
     loginAccount: 'Autentificare',
+    menu: 'Meniu',
     language: 'Limbă'
   },
   home: {

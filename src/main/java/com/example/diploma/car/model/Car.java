@@ -23,12 +23,12 @@ public class Car {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID uuid;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "engine_uuid", nullable = false, unique = true)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "engine_uuid", nullable = false)
     private Engine engine;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "car_specs_uuid", nullable = false, unique = true)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "car_specs_uuid", nullable = false)
     private CarSpecs carSpecs;
 
     @Column(nullable = false)
