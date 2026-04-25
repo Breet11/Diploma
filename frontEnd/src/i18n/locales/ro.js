@@ -64,6 +64,11 @@ export default {
     menu: 'Meniu',
     language: 'Limbă'
   },
+  footer: {
+    contact: 'Contact',
+    address: 'Adresă',
+    rights: 'Toate drepturile rezervate'
+  },
   home: {
     title: 'Serviciu de închiriere auto',
     description: 'Alegeți un automobil, setați durata închirierii și obțineți calculul prețului ținând cont de programul de loialitate.'

@@ -64,6 +64,11 @@ export default {
     menu: 'Menu',
     language: 'Language'
   },
+  footer: {
+    contact: 'Contact',
+    address: 'Address',
+    rights: 'All rights reserved'
+  },
   home: {
     title: 'Car rental service',
     description: 'Choose a car, set the rental duration, and get a price estimate with the loyalty program applied.'

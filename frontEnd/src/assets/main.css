@@ -24,6 +24,32 @@ body {
   padding: 24px 16px 40px;
 }
 
+.app-footer {
+  background: #111827;
+  color: #d1d5db;
+  border-top: 1px solid #374151;
+}
+
+.app-footer__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px;
+  display: grid;
+  gap: 6px;
+}
+
+.app-footer__brand {
+  margin: 0;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.app-footer__text,
+.app-footer__copyright {
+  margin: 0;
+  font-size: 13px;
+}
+
 .header {
   background: #111827;
   border-bottom: 1px solid #374151;
@@ -192,6 +218,12 @@ body {
 
 .cars-filters__reset {
   width: 100%;
+}
+
+.cars-pagination {
+  margin-top: 16px;
+  display: flex;
+  justify-content: center;
 }
 
 .cars-filters__toggle {

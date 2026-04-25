@@ -1,5 +1,6 @@
 <script setup>
 import AppHeader from './components/layout/AppHeader.vue';
+import AppFooter from './components/layout/AppFooter.vue';
 import GlobalToasts from './components/ui/GlobalToasts.vue';
 </script>
 
@@ -11,6 +12,7 @@ import GlobalToasts from './components/ui/GlobalToasts.vue';
         <RouterView />
       </v-container>
     </v-main>
+    <AppFooter />
     <GlobalToasts />
   </v-app>
 </template>

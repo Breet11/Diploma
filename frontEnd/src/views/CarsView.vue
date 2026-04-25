@@ -18,6 +18,8 @@ const selectedCar = ref(null);
 const loading = ref(false);
 const maxHourlyPrice = ref(0);
 const releaseYearRange = ref([0, 0]);
+const currentPage = ref(1);
+const itemsPerPage = 9;
 
 const isRentalModalOpen = ref(false);
 
@@ -142,6 +144,19 @@ const filteredCars = computed(() => {
   });
 });
 
+const totalPages = computed(() => {
+  if (filteredCars.value.length === 0) {
+    return 1;
+  }
+
+  return Math.ceil(filteredCars.value.length / itemsPerPage);
+});
+
+const paginatedCars = computed(() => {
+  const startIndex = (currentPage.value - 1) * itemsPerPage;
+  return filteredCars.value.slice(startIndex, startIndex + itemsPerPage);
+});
+
 watch(
   priceRange,
   (range) => {
@@ -181,6 +196,7 @@ function resetFilters() {
   filters.fuelType = '';
   maxHourlyPrice.value = priceRange.value.max;
   releaseYearRange.value = [releaseYearBounds.value.min, releaseYearBounds.value.max];
+  currentPage.value = 1;
 }
 
 function handleViewportResize() {
@@ -267,6 +283,21 @@ async function submitRental() {
 
 watch(() => rentalForm.hours, recalculatePrice);
 watch(selectedCar, recalculatePrice);
+watch([
+  () => filters.brand,
+  () => filters.fuelType,
+  () => maxHourlyPrice.value,
+  () => releaseYearRange.value[0],
+  () => releaseYearRange.value[1]
+], () => {
+  currentPage.value = 1;
+});
+
+watch(totalPages, (pages) => {
+  if (currentPage.value > pages) {
+    currentPage.value = pages;
+  }
+});
 
 onMounted(() => {
   handleViewportResize();
@@ -292,7 +323,10 @@ loadCars();
         <p v-if="loading">{{ t('common.loading') }}</p>
         <p v-else-if="filteredCars.length === 0">{{ t('cars.filters.noResults') }}</p>
         <div v-else class="cars-grid">
-          <CarCard v-for="car in filteredCars" :key="car.uuid" :car="car" @rent="openRentalModal" />
+          <CarCard v-for="car in paginatedCars" :key="car.uuid" :car="car" @rent="openRentalModal" />
+        </div>
+        <div v-if="filteredCars.length > itemsPerPage" class="cars-pagination">
+          <v-pagination v-model="currentPage" :length="totalPages" :total-visible="6" color="primary" rounded="circle" />
         </div>
       </div>
 
