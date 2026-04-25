@@ -50,17 +50,24 @@ public class ImageCompressionService {
         try {
             BufferedImage original = ImageIO.read(new java.io.ByteArrayInputStream(source));
             if (original == null) {
-                throw new IllegalArgumentException("Unsupported image format");
+                // Keep the original bytes when no ImageIO decoder is available (e.g. WEBP without plugin).
+                return new CompressedImage(source, contentType);
             }
 
             BufferedImage resized = resizeIfNeeded(original);
+            if (resized == original) {
+                // Keep original bytes if dimensions are already within limits to avoid extra quality loss.
+                return new CompressedImage(source, contentType);
+            }
+
             String outputFormat = pickOutputFormat(contentType, resized.getColorModel().hasAlpha());
             String outputContentType = outputFormat.equals("png") ? "image/png" : "image/jpeg";
 
             byte[] output = writeImage(resized, outputFormat);
             return new CompressedImage(output, outputContentType);
         } catch (IOException exception) {
-            throw new IllegalArgumentException("Failed to compress image", exception);
+            // If optimization fails, keep source image so non-JPEG formats still render.
+            return new CompressedImage(source, contentType);
         }
     }
 
@@ -73,19 +80,44 @@ public class ImageCompressionService {
         }
 
         double scale = Math.min((double) maxWidth / width, (double) maxHeight / height);
-        int newWidth = Math.max(1, (int) Math.round(width * scale));
-        int newHeight = Math.max(1, (int) Math.round(height * scale));
+        int targetWidth = Math.max(1, (int) Math.round(width * scale));
+        int targetHeight = Math.max(1, (int) Math.round(height * scale));
 
-        int imageType = original.getColorModel().hasAlpha() ? BufferedImage.TYPE_INT_ARGB : BufferedImage.TYPE_INT_RGB;
-        BufferedImage resized = new BufferedImage(newWidth, newHeight, imageType);
+        return scaleProgressively(original, targetWidth, targetHeight);
+    }
 
+    private BufferedImage scaleProgressively(BufferedImage source, int targetWidth, int targetHeight) {
+        BufferedImage current = source;
+        int currentWidth = source.getWidth();
+        int currentHeight = source.getHeight();
+
+        // Multi-step downscaling reduces aliasing artifacts compared to single large resize.
+        while (currentWidth / 2 >= targetWidth && currentHeight / 2 >= targetHeight) {
+            int nextWidth = Math.max(targetWidth, currentWidth / 2);
+            int nextHeight = Math.max(targetHeight, currentHeight / 2);
+            current = resizeOnce(current, nextWidth, nextHeight);
+            currentWidth = nextWidth;
+            currentHeight = nextHeight;
+        }
+
+        if (currentWidth != targetWidth || currentHeight != targetHeight) {
+            current = resizeOnce(current, targetWidth, targetHeight);
+        }
+
+        return current;
+    }
+
+    private BufferedImage resizeOnce(BufferedImage source, int width, int height) {
+        int imageType = source.getColorModel().hasAlpha() ? BufferedImage.TYPE_INT_ARGB : BufferedImage.TYPE_INT_RGB;
+        BufferedImage resized = new BufferedImage(width, height, imageType);
         Graphics2D graphics = resized.createGraphics();
         graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
         graphics.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        graphics.drawImage(original, 0, 0, newWidth, newHeight, null);
+        graphics.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
+        graphics.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
+        graphics.drawImage(source, 0, 0, width, height, null);
         graphics.dispose();
-
         return resized;
     }
 
@@ -120,11 +152,23 @@ public class ImageCompressionService {
     }
 
     private String pickOutputFormat(String contentType, boolean hasAlpha) {
-        if ("image/png".equals(contentType) && hasAlpha) {
+        if ("image/png".equals(contentType)) {
             return "png";
         }
 
-        return "jpg";
+        if ("image/jpeg".equals(contentType)) {
+            return "jpg";
+        }
+
+        if ("image/gif".equals(contentType)) {
+            return hasAlpha ? "png" : "jpg";
+        }
+
+        if ("image/webp".equals(contentType)) {
+            return hasAlpha ? "png" : "jpg";
+        }
+
+        return hasAlpha ? "png" : "jpg";
     }
 
     private String normalizeContentType(String contentType) {
@@ -139,6 +183,14 @@ public class ImageCompressionService {
 
         if (normalized.contains("png")) {
             return "image/png";
+        }
+
+        if (normalized.contains("webp")) {
+            return "image/webp";
+        }
+
+        if (normalized.contains("gif")) {
+            return "image/gif";
         }
 
         if (normalized.contains("jpeg") || normalized.contains("jpg")) {

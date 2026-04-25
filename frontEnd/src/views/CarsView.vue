@@ -29,6 +29,15 @@ const priceInfo = ref(null);
 
 const localeTag = computed(() => LOCALE_TAGS[locale.value] || LOCALE_TAGS.en);
 const authorized = computed(() => isAuthenticated());
+const selectedCarImageSrc = computed(() => {
+  if (!selectedCar.value || !selectedCar.value.imageBase64) {
+    return 'https://via.placeholder.com/640x360?text=Car+Image';
+  }
+
+  const contentType = selectedCar.value.imageContentType || 'image/jpeg';
+  return `data:${contentType};base64,${selectedCar.value.imageBase64}`;
+});
+
 const canSubmitRental = computed(() => {
   if (!selectedCar.value || !rentalForm.hours || Number(rentalForm.hours) <= 0) {
     return false;
@@ -127,7 +136,15 @@ loadCars();
 
     <BaseModal :is-open="isRentalModalOpen" :title="t('cars.rentModalTitle')" @close="closeRentalModal">
       <form class="form-grid" @submit.prevent="submitRental">
-        <p v-if="selectedCar"><strong>{{ selectedCar.brand }} {{ selectedCar.model }}</strong></p>
+        <div v-if="selectedCar" class="rental-car-preview">
+          <v-img
+            :src="selectedCarImageSrc"
+            :alt="`${selectedCar.brand} ${selectedCar.model}`"
+            class="rental-car-preview__image"
+            cover
+          />
+          <p class="rental-car-preview__title"><strong>{{ selectedCar.brand }} {{ selectedCar.model }}</strong></p>
+        </div>
 
         <TextFieldBuilder id="hours" v-model="rentalForm.hours" type="number" :label="t('common.labels.hours')" />
 
@@ -151,3 +168,21 @@ loadCars();
     </BaseModal>
   </section>
 </template>
+
+<style scoped>
+.rental-car-preview {
+  display: grid;
+  gap: 8px;
+}
+
+.rental-car-preview__image {
+  width: 100%;
+  max-height: 210px;
+  border-radius: 10px;
+}
+
+.rental-car-preview__title {
+  margin: 0;
+}
+</style>
+

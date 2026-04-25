@@ -34,6 +34,13 @@ export default {
       ADMIN: 'Администратор',
       USER: 'Пользователь'
     },
+    rentalOrderStatus: {
+      NEW: 'Новая',
+      IN_PROGRESS: 'В обработке',
+      APPROVED: 'Подтверждена',
+      REJECTED: 'Отклонена',
+      COMPLETED: 'Завершена'
+    },
     labels: {
       login: 'Логин',
       email: 'Email',
@@ -77,7 +84,16 @@ export default {
     title: 'Личный кабинет',
     login: 'Логин',
     email: 'Email',
-    role: 'Роль'
+    role: 'Роль',
+    orderHistoryTitle: 'Мои заявки на аренду',
+    orderHistoryEmpty: 'У вас пока нет заявок на аренду',
+    orders: {
+      car: 'Автомобиль',
+      hours: 'Часы',
+      totalPrice: 'Итоговая стоимость',
+      status: 'Статус',
+      createdAt: 'Создано'
+    }
   },
   carCard: {
     year: 'Год',
@@ -179,6 +195,7 @@ export default {
       car: {
         title: 'Автомобили',
         createTitle: 'Создать автомобиль',
+        noImageAttachedYet: 'К этой записи пока не прикреплено изображение',
         columns: {
           brand: 'Бренд',
           model: 'Модель',
@@ -221,6 +238,9 @@ export default {
           totalPrice: 'Сумма',
           status: 'Статус',
           createdAt: 'Дата заявки'
+        },
+        fields: {
+          status: 'Статус'
         }
       }
     }

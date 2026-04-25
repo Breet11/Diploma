@@ -146,8 +146,14 @@ public class LocalSeedImageLoader implements ApplicationRunner {
         if (name.endsWith(".svg")) {
             return "image/svg+xml";
         }
+        if (name.endsWith(".webp")) {
+            return "image/webp";
+        }
         if (name.endsWith(".png")) {
             return "image/png";
+        }
+        if (name.endsWith(".jpg") || name.endsWith(".jpeg")) {
+            return "image/jpeg";
         }
         return "image/jpeg";
     }

@@ -4,6 +4,8 @@ import java.util.UUID;
 
 public record CarCatalogItemResponse(
         UUID uuid,
+        UUID engineUuid,
+        UUID carSpecsUuid,
         String brand,
         String model,
         Long releaseYear,

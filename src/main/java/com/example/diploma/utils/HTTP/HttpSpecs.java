@@ -99,9 +99,13 @@ public final class HttpSpecs {
         public static final String CREATE = "";
         public static final String CALCULATE_PRICE = "/price";
         public static final String GET_ADMIN_ORDERS = "/admin";
+        public static final String GET_MY_ORDERS = "/my";
+        public static final String UPDATE_STATUS = "/{uuid}/status";
         public static final String CREATE_ENDPOINT = ROOT;
         public static final String CALCULATE_PRICE_ENDPOINT = ROOT + CALCULATE_PRICE;
         public static final String GET_ADMIN_ORDERS_ENDPOINT = ROOT + GET_ADMIN_ORDERS;
+        public static final String GET_MY_ORDERS_ENDPOINT = ROOT + GET_MY_ORDERS;
+        public static final String UPDATE_STATUS_ENDPOINT = ROOT + UPDATE_STATUS;
 
         private Rental() {
         }

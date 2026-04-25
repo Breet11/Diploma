@@ -12,6 +12,11 @@ import { formatUsd } from '../utils/currency';
 const { t, locale } = useI18n();
 const { success: showSuccess, error: showError } = useToast();
 const localeTag = computed(() => LOCALE_TAGS[locale.value] || LOCALE_TAGS.en);
+const RENTAL_STATUS_VALUES = ['NEW', 'IN_PROGRESS', 'APPROVED', 'REJECTED', 'COMPLETED'];
+
+function formatRentalStatus(status) {
+  return t(`common.rentalOrderStatus.${status}`, status || '-');
+}
 
 const entities = [
   {
@@ -207,11 +212,25 @@ const entities = [
       { key: 'car' },
       { key: 'hours' },
       { key: 'totalPrice', format: (value) => formatUsd(value, localeTag.value) },
-      { key: 'status' },
+      { key: 'status', format: (value) => formatRentalStatus(value) },
       { key: 'createdAt', format: (value) => new Date(value).toLocaleString(localeTag.value) }
     ],
     list: () => api.getAdminRentalOrders(),
-    readOnly: true
+    update: (uuid, payload) => api.updateRentalOrderStatus(uuid, payload.status),
+    canCreate: false,
+    fields: [],
+    selects: [
+      {
+        key: 'status',
+        options: RENTAL_STATUS_VALUES.map((value) => ({
+          value,
+          labelKey: `common.rentalOrderStatus.${value}`
+        }))
+      }
+    ],
+    normalize: (payload) => ({
+      status: payload.status
+    })
   }
 ];
 
@@ -228,6 +247,21 @@ const imageFile = ref(null);
 const referenceOptions = reactive({});
 const errorMessage = ref('');
 const successMessage = ref('');
+
+const isCarEditMode = computed(() => currentAction.value?.mode === 'edit' && currentAction.value?.entity?.key === 'car');
+const currentCarImageSrc = computed(() => {
+  if (!isCarEditMode.value) {
+    return null;
+  }
+
+  const imageBase64 = currentAction.value?.row?.imageBase64;
+  if (!imageBase64) {
+    return null;
+  }
+
+  const contentType = currentAction.value?.row?.imageContentType || 'image/jpeg';
+  return `data:${contentType};base64,${imageBase64}`;
+});
 
 function entityPath(entity, segment, fieldKey = null) {
   return fieldKey ? `admin.entities.${entity.key}.${segment}.${fieldKey}` : `admin.entities.${entity.key}.${segment}`;
@@ -296,7 +330,7 @@ function resetForm() {
 }
 
 async function openCreate() {
-  if (activeEntity.value.readOnly) {
+  if (activeEntity.value.readOnly || activeEntity.value.canCreate === false || !activeEntity.value.create) {
     return;
   }
 
@@ -357,6 +391,10 @@ function close() {
 function onFileChange(event) {
   const [file] = event.target.files || [];
   imageFile.value = file || null;
+}
+
+function hasActionColumn(entity) {
+  return Boolean(entity.update || entity.remove);
 }
 
 async function loadRows() {
@@ -444,7 +482,7 @@ onMounted(loadRows);
         <div class="admin-main__header">
           <h2 class="admin-main__title">{{ getEntityTitle(activeEntity) }}</h2>
           <button
-            v-if="!activeEntity.readOnly"
+            v-if="activeEntity.canCreate !== false && activeEntity.create"
             type="button"
             class="btn admin-icon-btn"
             :title="getEntityCreateTitle(activeEntity)"
@@ -461,22 +499,22 @@ onMounted(loadRows);
           <thead>
             <tr>
               <th v-for="column in activeEntity.columns" :key="column.key">{{ getColumnLabel(activeEntity, column) }}</th>
-              <th v-if="!activeEntity.readOnly">{{ t('common.labels.actions') }}</th>
+              <th v-if="hasActionColumn(activeEntity)">{{ t('common.labels.actions') }}</th>
             </tr>
           </thead>
           <tbody>
             <tr v-if="rows.length === 0">
-              <td :colspan="activeEntity.columns.length + (activeEntity.readOnly ? 0 : 1)">{{ t('admin.empty') }}</td>
+              <td :colspan="activeEntity.columns.length + (hasActionColumn(activeEntity) ? 1 : 0)">{{ t('admin.empty') }}</td>
             </tr>
             <tr v-for="row in rows" :key="row.uuid">
               <td v-for="column in activeEntity.columns" :key="column.key">
                 {{ column.format ? column.format(row[column.key]) : row[column.key] }}
               </td>
-              <td v-if="!activeEntity.readOnly">
-                <button type="button" class="btn btn--ghost admin-icon-btn" :title="t('common.actions.edit')" @click="openEdit(row)">
+              <td v-if="hasActionColumn(activeEntity)">
+                <button v-if="activeEntity.update" type="button" class="btn btn--ghost admin-icon-btn" :title="t('common.actions.edit')" @click="openEdit(row)">
                   <i class="mdi mdi-file-document-edit-outline"></i>
                 </button>
-                <button type="button" class="btn btn--ghost admin-icon-btn" :title="t('common.actions.delete')" @click="removeRow(row)">
+                <button v-if="activeEntity.remove" type="button" class="btn btn--ghost admin-icon-btn" :title="t('common.actions.delete')" @click="removeRow(row)">
                   <i class="mdi mdi-delete-outline"></i>
                 </button>
               </td>
@@ -524,6 +562,18 @@ onMounted(loadRows);
 
         <div v-if="currentAction.entity.hasFile" class="field">
           <label class="field__label" for="carImage">{{ t('admin.entities.car.fields.image') }}</label>
+
+          <div v-if="isCarEditMode" class="admin-car-image-preview">
+            <v-img
+              v-if="currentCarImageSrc"
+              :src="currentCarImageSrc"
+              :alt="`${currentAction.row.brand} ${currentAction.row.model}`"
+              class="admin-car-image-preview__image"
+              cover
+            />
+            <p v-else class="admin-car-image-preview__empty">{{ t('admin.entities.car.noImageAttachedYet') }}</p>
+          </div>
+
           <input id="carImage" class="field__control" type="file" accept="image/*" @change="onFileChange" />
         </div>
 
@@ -538,4 +588,23 @@ onMounted(loadRows);
     </BaseModal>
   </section>
 </template>
+
+<style scoped>
+.admin-car-image-preview {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.admin-car-image-preview__image {
+  width: 100%;
+  max-height: 220px;
+  border-radius: 10px;
+}
+
+.admin-car-image-preview__empty {
+  margin: 0;
+  color: #6b7280;
+}
+</style>
 

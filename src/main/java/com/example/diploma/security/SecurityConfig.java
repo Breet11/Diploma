@@ -83,7 +83,8 @@ public class SecurityConfig {
                                 HttpSpecs.CarSpecs.ROOT + HttpSpecs.ANY_SUBPATH,
                                 HttpSpecs.Engine.ROOT + HttpSpecs.ANY_SUBPATH,
                                 HttpSpecs.EngineType.ROOT + HttpSpecs.ANY_SUBPATH,
-                                HttpSpecs.LoyaltyRule.ROOT + HttpSpecs.ANY_SUBPATH
+                                HttpSpecs.LoyaltyRule.ROOT + HttpSpecs.ANY_SUBPATH,
+                                HttpSpecs.Rental.ROOT + HttpSpecs.ANY_SUBPATH
                         ).hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE,
                                 HttpSpecs.Car.ROOT + HttpSpecs.ANY_SUBPATH,

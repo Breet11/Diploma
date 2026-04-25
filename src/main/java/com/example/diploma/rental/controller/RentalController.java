@@ -5,6 +5,8 @@ import com.example.diploma.rental.dto.CalculateRentalPriceResponse;
 import com.example.diploma.rental.dto.CreateRentalRequest;
 import com.example.diploma.rental.dto.CreateRentalResponse;
 import com.example.diploma.rental.dto.RentalOrderAdminListItemResponse;
+import com.example.diploma.rental.dto.RentalOrderProfileListItemResponse;
+import com.example.diploma.rental.dto.UpdateRentalOrderStatusRequest;
 import com.example.diploma.rental.service.CalculateRentalPriceService;
 import com.example.diploma.rental.service.CreateRentalService;
 import com.example.diploma.rental.service.GetRentalOrdersService;
@@ -14,12 +16,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(HttpSpecs.Rental.ROOT)
@@ -32,6 +37,20 @@ public class RentalController {
     @GetMapping(HttpSpecs.Rental.GET_ADMIN_ORDERS)
     public ResponseEntity<List<RentalOrderAdminListItemResponse>> getRentalOrdersForAdmin() {
         return ResponseEntity.ok(getRentalOrdersService.getRentalOrders());
+    }
+
+    @GetMapping(HttpSpecs.Rental.GET_MY_ORDERS)
+    public ResponseEntity<List<RentalOrderProfileListItemResponse>> getCurrentUserRentalOrders(Authentication authentication) {
+        return ResponseEntity.ok(getRentalOrdersService.getCurrentUserOrders(authentication.getName()));
+    }
+
+    @PatchMapping(HttpSpecs.Rental.UPDATE_STATUS)
+    public ResponseEntity<Void> updateRentalOrderStatus(
+            @PathVariable UUID uuid,
+            @Valid @RequestBody UpdateRentalOrderStatusRequest updateRentalOrderStatusRequest
+    ) {
+        getRentalOrdersService.updateOrderStatus(uuid, updateRentalOrderStatusRequest.status());
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping(HttpSpecs.Rental.CALCULATE_PRICE)

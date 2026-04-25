@@ -34,6 +34,13 @@ export default {
       ADMIN: 'Administrator',
       USER: 'Utilizator'
     },
+    rentalOrderStatus: {
+      NEW: 'Noua',
+      IN_PROGRESS: 'In procesare',
+      APPROVED: 'Aprobata',
+      REJECTED: 'Respinsa',
+      COMPLETED: 'Finalizata'
+    },
     labels: {
       login: 'Login',
       email: 'Email',
@@ -77,7 +84,16 @@ export default {
     title: 'Profil',
     login: 'Login',
     email: 'Email',
-    role: 'Rol'
+    role: 'Rol',
+    orderHistoryTitle: 'Cererile mele de inchiriere',
+    orderHistoryEmpty: 'Nu aveti inca cereri de inchiriere',
+    orders: {
+      car: 'Automobil',
+      hours: 'Ore',
+      totalPrice: 'Pret total',
+      status: 'Status',
+      createdAt: 'Creat la'
+    }
   },
   carCard: {
     year: 'An',
@@ -179,6 +195,7 @@ export default {
       car: {
         title: 'Automobile',
         createTitle: 'Creează automobil',
+        noImageAttachedYet: 'Nu este atașată încă nicio imagine pentru această înregistrare',
         columns: {
           brand: 'Marcă',
           model: 'Model',
@@ -221,6 +238,9 @@ export default {
           totalPrice: 'Sumă',
           status: 'Status',
           createdAt: 'Data cererii'
+        },
+        fields: {
+          status: 'Status'
         }
       }
     }

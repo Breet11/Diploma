@@ -5,6 +5,7 @@ import com.example.diploma.rental.dto.CalculateRentalPriceRequest;
 import com.example.diploma.rental.dto.CreateRentalRequest;
 import com.example.diploma.rental.dto.CreateRentalResponse;
 import com.example.diploma.rental.model.RentalOrder;
+import com.example.diploma.rental.model.RentalOrderStatus;
 import com.example.diploma.rental.repository.RentalOrderRepository;
 import com.example.diploma.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,7 @@ public class CreateRentalServiceCustom implements CreateRentalService {
         rentalOrder.setCar(car);
         rentalOrder.setHours(createRentalRequest.hours());
         rentalOrder.setTotalPrice(priceInfo.totalPrice());
-        rentalOrder.setStatus("NEW");
+        rentalOrder.setStatus(RentalOrderStatus.NEW.name());
         rentalOrder.setCreatedAt(OffsetDateTime.now());
 
         if (currentLogin != null) {

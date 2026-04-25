@@ -12,6 +12,8 @@ import java.util.UUID;
 public interface CarRepository extends CrudRepository<Car, UUID> {
 	@Query("""
 			select c.uuid as uuid,
+			       e.uuid as engineUuid,
+			       cs.uuid as carSpecsUuid,
 				   cb.name as brand,
 				   cm.name as model,
 				   cs.releaseYear as releaseYear,
@@ -34,6 +36,10 @@ public interface CarRepository extends CrudRepository<Car, UUID> {
 
 	interface CarCatalogProjection {
 		UUID getUuid();
+
+		UUID getEngineUuid();
+
+		UUID getCarSpecsUuid();
 
 		String getBrand();
 

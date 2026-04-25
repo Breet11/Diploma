@@ -20,6 +20,8 @@ public class GetCarCatalogServiceCustom implements GetCarCatalogService {
         return carRepository.findCatalogItems().stream()
                 .map(item -> new CarCatalogItemResponse(
                         item.getUuid(),
+                        item.getEngineUuid(),
+                        item.getCarSpecsUuid(),
                         item.getBrand(),
                         item.getModel(),
                         item.getReleaseYear(),

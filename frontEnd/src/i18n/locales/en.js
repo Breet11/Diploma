@@ -34,6 +34,13 @@ export default {
       ADMIN: 'Administrator',
       USER: 'User'
     },
+    rentalOrderStatus: {
+      NEW: 'New',
+      IN_PROGRESS: 'In progress',
+      APPROVED: 'Approved',
+      REJECTED: 'Rejected',
+      COMPLETED: 'Completed'
+    },
     labels: {
       login: 'Login',
       email: 'Email',
@@ -77,7 +84,16 @@ export default {
     title: 'Profile',
     login: 'Login',
     email: 'Email',
-    role: 'Role'
+    role: 'Role',
+    orderHistoryTitle: 'My rental requests',
+    orderHistoryEmpty: 'You do not have rental requests yet',
+    orders: {
+      car: 'Car',
+      hours: 'Hours',
+      totalPrice: 'Total price',
+      status: 'Status',
+      createdAt: 'Created at'
+    }
   },
   carCard: {
     year: 'Year',
@@ -179,6 +195,7 @@ export default {
       car: {
         title: 'Cars',
         createTitle: 'Create car',
+        noImageAttachedYet: 'No image attached to this record yet',
         columns: {
           brand: 'Brand',
           model: 'Model',
@@ -221,6 +238,9 @@ export default {
           totalPrice: 'Amount',
           status: 'Status',
           createdAt: 'Request date'
+        },
+        fields: {
+          status: 'Status'
         }
       }
     }

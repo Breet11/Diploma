@@ -26,6 +26,14 @@ export const api = {
     return apiClient.get('/rentals/admin');
   },
 
+  getMyRentalOrders() {
+    return apiClient.get('/rentals/my');
+  },
+
+  updateRentalOrderStatus(uuid, status) {
+    return apiClient.patch(`/rentals/${uuid}/status`, { status });
+  },
+
   getProfile() {
     return apiClient.get('/profile/me');
   },
