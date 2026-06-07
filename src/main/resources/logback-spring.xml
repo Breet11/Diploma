@@ -1,10 +1,14 @@
 <configuration>
     <property name="LOG_DIR" value="logs"/>
 
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n</pattern>
+        </encoder>
+    </appender>
+
     <appender name="SIFT" class="ch.qos.logback.classic.sift.SiftingAppender">
         <discriminator class="com.example.diploma.utils.LoggerNameDiscriminator">
-            <key>classLog</key>
-            <defaultValue>application</defaultValue>
         </discriminator>
         <sift>
             <appender name="FILE-${classLog}" class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -15,10 +19,8 @@
                     <maxHistory>14</maxHistory>
                     <totalSizeCap>1GB</totalSizeCap>
                 </rollingPolicy>
-                <filter class="ch.qos.logback.classic.filter.LevelFilter">
+                <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
                     <level>INFO</level>
-                    <onMatch>ACCEPT</onMatch>
-                    <onMismatch>DENY</onMismatch>
                 </filter>
                 <encoder>
                     <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n</pattern>
@@ -29,8 +31,12 @@
 
     <logger name="com.example.diploma" level="INFO" additivity="false">
         <appender-ref ref="SIFT"/>
+        <appender-ref ref="CONSOLE"/>
     </logger>
 
-    <root level="WARN"/>
+    <root level="WARN">
+        <appender-ref ref="SIFT"/>
+        <appender-ref ref="CONSOLE"/>
+    </root>
 </configuration>
 
